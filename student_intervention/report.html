@@ -12155,9 +12155,15 @@ Testing set has 126 samples.
 <p>1) Decision Trees</p>
 <p>A real-world example of this model is the analysis of data to identify sub-atomic particles, see David Bowser-Chao and Debra L. Dzialo, Phys. Rev. D 47, 1900 – Published 1 March 1993. Decision trees are a powerful way of classifying data because. They are relatively fast to proces and easy to code as decision trees tend to operate following a greedy algorithm. Perhaps more than any other model, they are conceptually quite simple and map strongly to our intuition to break data sets into smaller and smaller mutually exclusive sets based on a series of if-else statements.</p>
 <p>On the other hand, decision trees in particular can suffer if the data is strongly colinear i.e. have lots of interelated variables. Secondly, we quickly have to consider how we represent the data set due to exponential growth of output variables e.g. XOR. Thirdly, there is a strong chance of overfitting the data if we naively go through all features naively, however this can be mitigated by pruning the tree.</p>
-<p>The data set given has relatively simple features, being all discrete data, most of which takes binary values.</p>
+<p>This classifier could be useful as the data set given has relatively simple features, being all discrete data, most of which takes binary values.</p>
 <p>2) Support Vector Machines (SVM)</p>
+<p>Support vector machines have been used to in face detection models, see for example Edgar Osuna et al. "Training Support Vector Machines: an Application to Face Detection (1997)". SVM are a simple and scalable means of classifying data sets. As SVM aims to maximise the margin defining the hyperplane, the classifier produced is very robust. SVM can take advantage of the so-called "Kernal Trick" which means it can handle nonlinear datasets very easily.</p>
+<p>Unfortunately, SVMs are particularly sensitive to the choice of input parameters in particular the choice of kernel. This can lead to overfitting the data.</p>
+<p>The data set given has a large number of features, most of which being simple, with some degree of nonlinearity. These could all be efficiently handled, at sacle by an SVM classifier.</p>
 <p>3) Gaussian Naive Bayes</p>
+<p>A real-world example of this model is its use to act as a spam filter for email, this was first discussed in an academic context by Mehran Sahami et al. in "A Bayesian Approach to Filtering Junk E-Mail". Naive Bayes classifiers are very useful for simple datasets as the classifiers themselves are relatively simple to implement, and can quickly produce usable answers i.e. most likely category for given student. This is especially true for small data sets.</p>
+<p>However, Naive Bayes makes makes many assumptions about the dataset, that the features are independent of each other. This can be a severe limitation especially if the features are highly colinear: For instance, the word order is an important consideration for text analysis, which Naive Bayes will ignore. The conclusions the Naive Bayes classifier reaches is also highly dependent on the input data set, and depending on the initial prior, can lead to a severly underfit classifier.</p>
+<p>This classifier could be useful as there are a large number of independent features, and we are producing a simple classification.</p>
 
 </div>
 </div>
@@ -12537,12 +12543,14 @@ F1 score for test set: 0.6839.
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Import &#39;GridSearchCV&#39; and &#39;make_scorer&#39;</span>
+<span class="kn">from</span> <span class="nn">sklearn.grid_search</span> <span class="kn">import</span> <span class="n">GridSearchCV</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">make_scorer</span>
 
 <span class="c1"># TODO: Create the parameters list you wish to tune</span>
-<span class="n">parameters</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">parameters</span> <span class="o">=</span> <span class="p">{}</span>
 
 <span class="c1"># TODO: Initialize the classifier</span>
-<span class="n">clf</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="c1"># TODO: Make an f1 scoring function using &#39;make_scorer&#39; </span>
 <span class="n">f1_scorer</span> <span class="o">=</span> <span class="bp">None</span>
