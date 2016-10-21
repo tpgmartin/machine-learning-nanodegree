@@ -11800,7 +11800,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Import libraries</span>
@@ -11852,7 +11852,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Calculate number of students</span>
@@ -11915,7 +11915,7 @@ Graduation rate of the class: 67.09%
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Extract feature columns</span>
@@ -11997,7 +11997,7 @@ Feature values:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">preprocess_features</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
@@ -12068,7 +12068,7 @@ Feature values:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Import any additional functionality you may need here</span>
@@ -12160,10 +12160,10 @@ Testing set has 126 samples.
 <p>Support vector machines have been used to in face detection models, see for example Edgar Osuna et al. "Training Support Vector Machines: an Application to Face Detection (1997)". SVM are a simple and scalable means of classifying data sets. As SVM aims to maximise the margin defining the hyperplane, the classifier produced is very robust. SVM can take advantage of the so-called "Kernal Trick" which means it can handle nonlinear datasets very easily.</p>
 <p>Unfortunately, SVMs are particularly sensitive to the choice of input parameters in particular the choice of kernel. This can lead to overfitting the data.</p>
 <p>The data set given has a large number of features, most of which being simple, with some degree of nonlinearity. These could all be efficiently handled, at sacle by an SVM classifier.</p>
-<p>3) Gaussian Naive Bayes</p>
-<p>A real-world example of this model is its use to act as a spam filter for email, this was first discussed in an academic context by Mehran Sahami et al. in "A Bayesian Approach to Filtering Junk E-Mail". Naive Bayes classifiers are very useful for simple datasets as the classifiers themselves are relatively simple to implement, and can quickly produce usable answers i.e. most likely category for given student. This is especially true for small data sets.</p>
-<p>However, Naive Bayes makes makes many assumptions about the dataset, that the features are independent of each other. This can be a severe limitation especially if the features are highly colinear: For instance, the word order is an important consideration for text analysis, which Naive Bayes will ignore. The conclusions the Naive Bayes classifier reaches is also highly dependent on the input data set, and depending on the initial prior, can lead to a severly underfit classifier.</p>
-<p>This classifier could be useful as there are a large number of independent features, and we are producing a simple classification.</p>
+<p>3) Logistic Regression</p>
+<p>Logistic regression has an establish use in modelling medical data for instance JC Marshall et al "Multiple organ dysfunction score: a reliable descriptor of a complex clinical outcome." Logistic regression classifiers are relatively simple and performant. They are also very flexible and make fewer assumptions about the input data sets: can handle nonlinearities, does not assume variables are normally distributed.</p>
+<p>However, logisitic regression are susceptible to underfit the data, and require relatively large input data sets to produce meaningful categorisations.</p>
+<p>The data set given is of a reasonable size (vs the feature set). The feature set itself is a combination of discrete values of some colinear values, which logistic regression can better handle. The output required is a simple binary category, which this classifier can easily handle.</p>
 
 </div>
 </div>
@@ -12188,7 +12188,7 @@ Testing set has 126 samples.
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">train_classifier</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">):</span>
@@ -12261,19 +12261,19 @@ Testing set has 126 samples.
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[47]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Import the three supervised learning models from sklearn</span>
 <span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 <span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeClassifier</span>
 <span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
-<span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="kn">import</span> <span class="n">GaussianNB</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
 
 <span class="c1"># TODO: Initialize the three models</span>
 <span class="n">clf_A</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">clf_B</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">clf_C</span> <span class="o">=</span> <span class="n">GaussianNB</span><span class="p">()</span>
+<span class="n">clf_C</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="c1"># TODO: Set up the training set sizes</span>
 <span class="n">X_train_100</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">replace</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -12312,23 +12312,59 @@ Testing set has 126 samples.
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Training a DecisionTreeClassifier using a training set size of 100. . .
-Trained model in 0.0011 seconds
-Made predictions in 0.0002 seconds.
+Trained model in 0.0012 seconds
+Made predictions in 0.0003 seconds.
 F1 score for training set: 1.0000.
-Made predictions in 0.0002 seconds.
+Made predictions in 0.0004 seconds.
 F1 score for test set: 0.7237.
 Training a DecisionTreeClassifier using a training set size of 200. . .
 Trained model in 0.0014 seconds
 Made predictions in 0.0003 seconds.
 F1 score for training set: 1.0000.
-Made predictions in 0.0004 seconds.
+Made predictions in 0.0003 seconds.
 F1 score for test set: 0.6914.
 Training a DecisionTreeClassifier using a training set size of 300. . .
-Trained model in 0.0023 seconds
-Made predictions in 0.0006 seconds.
+Trained model in 0.0020 seconds
+Made predictions in 0.0003 seconds.
 F1 score for training set: 1.0000.
-Made predictions in 0.0004 seconds.
+Made predictions in 0.0002 seconds.
 F1 score for test set: 0.6839.
+Training a SVC using a training set size of 100. . .
+Trained model in 0.0013 seconds
+Made predictions in 0.0008 seconds.
+F1 score for training set: 0.9143.
+Made predictions in 0.0012 seconds.
+F1 score for test set: 0.7807.
+Training a SVC using a training set size of 200. . .
+Trained model in 0.0037 seconds
+Made predictions in 0.0029 seconds.
+F1 score for training set: 0.8973.
+Made predictions in 0.0014 seconds.
+F1 score for test set: 0.7594.
+Training a SVC using a training set size of 300. . .
+Trained model in 0.0062 seconds
+Made predictions in 0.0047 seconds.
+F1 score for training set: 0.9231.
+Made predictions in 0.0022 seconds.
+F1 score for test set: 0.7396.
+Training a LogisticRegression using a training set size of 100. . .
+Trained model in 0.0010 seconds
+Made predictions in 0.0002 seconds.
+F1 score for training set: 0.8741.
+Made predictions in 0.0002 seconds.
+F1 score for test set: 0.7273.
+Training a LogisticRegression using a training set size of 200. . .
+Trained model in 0.0017 seconds
+Made predictions in 0.0003 seconds.
+F1 score for training set: 0.8571.
+Made predictions in 0.0003 seconds.
+F1 score for test set: 0.7529.
+Training a LogisticRegression using a training set size of 300. . .
+Trained model in 0.0024 seconds
+Made predictions in 0.0002 seconds.
+F1 score for training set: 0.8490.
+Made predictions in 0.0002 seconds.
+F1 score for test set: 0.7312.
 </pre>
 </div>
 </div>
@@ -12365,22 +12401,22 @@ F1 score for test set: 0.6839.
 <tbody>
 <tr>
 <td style="text-align:center">100</td>
-<td style="text-align:center">0.0011</td>
-<td style="text-align:center">0.0002</td>
+<td style="text-align:center">0.0014</td>
+<td style="text-align:center">0.0003</td>
 <td style="text-align:center">1.0000</td>
 <td style="text-align:center">0.7237</td>
 </tr>
 <tr>
 <td style="text-align:center">200</td>
-<td style="text-align:center">0.0014</td>
-<td style="text-align:center">0.0004</td>
+<td style="text-align:center">0.0016</td>
+<td style="text-align:center">0.0002</td>
 <td style="text-align:center">1.0000</td>
 <td style="text-align:center">0.6914</td>
 </tr>
 <tr>
 <td style="text-align:center">300</td>
-<td style="text-align:center">0.0023</td>
-<td style="text-align:center">0.0004</td>
+<td style="text-align:center">0.0028</td>
+<td style="text-align:center">0.0002</td>
 <td style="text-align:center">1.0000</td>
 <td style="text-align:center">0.6839</td>
 </tr>
@@ -12399,28 +12435,28 @@ F1 score for test set: 0.6839.
 <tbody>
 <tr>
 <td style="text-align:center">100</td>
-<td style="text-align:center">0.0014</td>
+<td style="text-align:center">0.0022</td>
 <td style="text-align:center">0.0009</td>
 <td style="text-align:center">0.9143</td>
 <td style="text-align:center">0.7807</td>
 </tr>
 <tr>
 <td style="text-align:center">200</td>
-<td style="text-align:center">0.0041</td>
-<td style="text-align:center">0.0019</td>
+<td style="text-align:center">0.0039</td>
+<td style="text-align:center">0.0017</td>
 <td style="text-align:center">0.8973</td>
 <td style="text-align:center">0.7594</td>
 </tr>
 <tr>
 <td style="text-align:center">300</td>
-<td style="text-align:center">0.0066</td>
-<td style="text-align:center">0.0019</td>
+<td style="text-align:center">0.0076</td>
+<td style="text-align:center">0.0024</td>
 <td style="text-align:center">0.9231</td>
 <td style="text-align:center">0.7396</td>
 </tr>
 </tbody>
 </table>
-<p><strong> Classifer 3 - GaussianNB </strong></p>
+<p><strong> Classifer 3 - LogisticRegression </strong></p>
 <table>
 <thead><tr>
 <th style="text-align:center">Training Set Size</th>
@@ -12433,24 +12469,24 @@ F1 score for test set: 0.6839.
 <tbody>
 <tr>
 <td style="text-align:center">100</td>
-<td style="text-align:center">0.0009</td>
-<td style="text-align:center">0.0004</td>
-<td style="text-align:center">0.2703</td>
-<td style="text-align:center">0.2600</td>
+<td style="text-align:center">0.0018</td>
+<td style="text-align:center">0.0003</td>
+<td style="text-align:center">0.8741</td>
+<td style="text-align:center">0.7273</td>
 </tr>
 <tr>
 <td style="text-align:center">200</td>
-<td style="text-align:center">0.0009</td>
+<td style="text-align:center">0.0023</td>
 <td style="text-align:center">0.0003</td>
-<td style="text-align:center">0.2162</td>
-<td style="text-align:center">0.2151</td>
+<td style="text-align:center">0.8571</td>
+<td style="text-align:center">0.7529</td>
 </tr>
 <tr>
 <td style="text-align:center">300</td>
-<td style="text-align:center">0.0012</td>
-<td style="text-align:center">0.0003</td>
-<td style="text-align:center">0.4133</td>
-<td style="text-align:center">0.3853</td>
+<td style="text-align:center">0.0035</td>
+<td style="text-align:center">0.0005</td>
+<td style="text-align:center">0.8490</td>
+<td style="text-align:center">0.7312</td>
 </tr>
 </tbody>
 </table>
@@ -12484,8 +12520,9 @@ F1 score for test set: 0.6839.
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer: </strong></p>
-<p>Based on the results in the table above, SVM would be the best model to classify the data. The F1 score for both training and testing sets is consistently high with training set size. Importantly, F1 score for the testing set does not diminish as much as other classifiers with training set size. Secondly, F1 score for training and testing is closer than the the decision tree classifier, indicating that the SVM model is not as overfit as the decision tree. We can conclude the SVM model is less susceptible to bias.</p>
-<p>Although both the training and prediction times are much larger than the other classifiers and increase with training set size, the total time is very small - in the order of milliseconds.</p>
+<p>Based on the results in the table above, SVM would be the best model to classify the data. We can dismiss the decision tree classifier as it is noticibly worse peforming than the other classifiers given the F1 test score.</p>
+<p>Although the SVM and Logistic Regression classifiers achieve similar performance, SVM is slightly better in relation to the training and testing F1 scores. I would say that it is more significant that SVM can be easily tuned by choice of a better kernel function to better account for nonlinear data sets. I predict this would significantly improve the training and test scores.</p>
+<p>I would not consider the differences in training time or prediction time to be that significant as in all cases it is of the order of milliseconds.</p>
 
 </div>
 </div>
@@ -12539,7 +12576,7 @@ F1 score for test set: 0.6839.
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[32]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Import &#39;GridSearchCV&#39; and &#39;make_scorer&#39;</span>
@@ -12547,19 +12584,20 @@ F1 score for test set: 0.6839.
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">make_scorer</span>
 
 <span class="c1"># TODO: Create the parameters list you wish to tune</span>
-<span class="n">parameters</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;kernel&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;poly&#39;</span><span class="p">,</span> <span class="s1">&#39;sigmoid&#39;</span><span class="p">,</span> <span class="s1">&#39;rbf&#39;</span><span class="p">],</span> <span class="s1">&#39;degree&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">]}</span>
 
 <span class="c1"># TODO: Initialize the classifier</span>
 <span class="n">clf</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 
 <span class="c1"># TODO: Make an f1 scoring function using &#39;make_scorer&#39; </span>
-<span class="n">f1_scorer</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">f1_scorer</span> <span class="o">=</span> <span class="n">make_scorer</span><span class="p">(</span><span class="n">f1_score</span><span class="p">,</span> <span class="n">pos_label</span><span class="o">=</span><span class="s2">&quot;yes&quot;</span><span class="p">,</span> <span class="n">greater_is_better</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
 <span class="c1"># TODO: Perform grid search on the classifier using the f1_scorer as the scoring method</span>
-<span class="n">grid_obj</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">grid_obj</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">clf</span><span class="p">,</span> <span class="n">param_grid</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">f1_scorer</span><span class="p">)</span>
 
 <span class="c1"># TODO: Fit the grid search object to the training data and find the optimal parameters</span>
-<span class="n">grid_obj</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">grid_obj</span> <span class="o">=</span> <span class="n">grid_obj</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 
 <span class="c1"># Get the estimator</span>
 <span class="n">clf</span> <span class="o">=</span> <span class="n">grid_obj</span><span class="o">.</span><span class="n">best_estimator_</span>
@@ -12570,6 +12608,23 @@ F1 score for test set: 0.6839.
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Made predictions in 0.0022 seconds.
+Tuned model has a training F1 score of 1.0000.
+Made predictions in 0.0011 seconds.
+Tuned model has a testing F1 score of 0.7730.
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -12590,6 +12645,8 @@ F1 score for test set: 0.6839.
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer: </strong></p>
+<p>Tuned model has a training F1 score of 1.0000, and a testing F1 score of 0.7730.</p>
+<p>These are both slight improvements over the untuned SVM classifier above.</p>
 
 </div>
 </div>
