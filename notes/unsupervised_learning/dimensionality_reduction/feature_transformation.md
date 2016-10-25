@@ -113,3 +113,20 @@ Linear Discriminant Analysis (LDA)
 ## Wrap up
 
 [A survey of dimension reduction techniques](http://computation.llnl.gov/casc/sapphire/pubs/148494.pdf)
+
+PCA is mostly about linear algebra, ICA is mostly about probability
+
+## Outro
+
+### Big Data
+
+Algorithmic challenges from gigantic datasets, even linear too slow
+
+### Deep learing
+
+New techniques for getting signal through multiple layers
+
+### Semi-supervised learing
+
+Example: webpages with information about cities, combine labeled data with 
+unlabeled data
