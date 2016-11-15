@@ -21926,10 +21926,10 @@ RU5ErkJggg==
 <p>The first two principal components explain approximately 71.89% of the data.
 The first four principal components explain approximately 93.13% of the data.
 (These values are from np.cumsum in the cell above, to 2 d.p.)</p>
-<p>Dimension one shows a significant positive weighting of milk, grocery, and non-food items. This could correspond to a corner shop customer.</p>
-<p>Dimension two shows a significant positive weighting of fresh, frozen, and delicatessen items, and positive weights to all features. This could correspond to a supermarket given the significan positive weighting to unprocessed food items.</p>
-<p>Dimension three shows a significant positive weighting to fresh food items only, and significant negative weighting to frozen and delicatessan items. This could correspond to a food market-type customer.</p>
-<p>Dimension four shows a significant positive weighting to delicatessan items only, and signifant negative weighting to frozen and non-food items. This could correspond to a restaurant or food seller customer.</p>
+<p>Dimension one shows a significant positive weighting of milk, grocery, and non-food items. This would represent spending where these staples are often bought together.</p>
+<p>Dimension two shows a significant positive weighting of fresh, frozen, and delicatessen items, and positive weights to all features. This could correpsond to a customer where all products are purchased together, with a greater variability in the amout spent on fresh, frozen, and delicatessen products.</p>
+<p>Dimension three shows a significant positive weighting to fresh food items only, and significant negative weighting to frozen and delicatessan items. This could spending where fresh food and non-food items are often bought together, without frozen or delicatessen items.</p>
+<p>Dimension four shows a significant positive weighting to delicatessan items only, and signifant negative weighting to frozen and non-food items. This could correspond to spending bulk spending on frozen and non-food items, with a high degree of variability.</p>
 
 </div>
 </div>
@@ -25404,9 +25404,9 @@ Sample point 2 predicted to be in Cluster 1
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
-<p>I guessed sample point 0 to represent a food market, which is the same as the cluster it is predicted to be in.</p>
-<p>I guessed sample point 1 to represent a restaurant, and is predicted to be in cluster 2, which is similar.</p>
-<p>I guessed sample point 2 to represent a corner shop, which corresponds to cluster 1 as above.</p>
+<p>I guessed sample point 0 to represent a food market, which is the same as the cluster it is predicted to be in. This appears to be consistent with the observation that sample point 0 spends significantly below average for most categories expect for fresh food, which is observed for this segment as well.</p>
+<p>I guessed sample point 1 to represent a restaurant, and is predicted to be in cluster 2, which is similar. Above I observed that sample point 1 spent above average for milk and grocery items, which is consistent with the segment 2 taken to be a cafe or restaurant. That said there is a descrepency between the little that sample point 1 spends on non-food items compared to what the cluster centre returns.</p>
+<p>I guessed sample point 2 to represent a corner shop, which corresponds to cluster 1 as above. This seems consistent with the observation that both this sample point and segment spend significantly below average across a spread of categories. As with the previous sample point above, this sample point spends much more on non-food items compared to the value returned for the cluster centre.</p>
 
 </div>
 </div>
