@@ -39,7 +39,11 @@ class LearningAgent(Agent):
         # Update epsilon using a decay function of your choice
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
-        self.epsilon = self.epsilon - 0.05
+        if testing:
+            self.epsilon = 0
+            self.alpha = 0
+        else:
+            self.epsilon = self.epsilon - 0.05
 
         return None
 
@@ -62,16 +66,6 @@ class LearningAgent(Agent):
         #   For each action, set the Q-value for the state-action pair to 0
         
         state = (waypoint,inputs)
-
-        print '-----------------'
-        print self.Q
-        print state
-        print '-----------------'
-
-        # if self.learning:
-        #     if not self.Q[state]:
-        #         self.Q.state
-
 
         return state
 
