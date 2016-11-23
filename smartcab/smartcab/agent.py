@@ -46,8 +46,13 @@ class LearningAgent(Agent):
             self.epsilon = 0
             self.alpha = 0
         else:
-            self.epsilon = self.epsilon - 0.05
-            # self.epsilon = math.exp(-1 * self.alpha * self.trial)
+            # default learning
+            # self.epsilon = self.epsilon - 0.05
+            # improved learning
+            self.epsilon = math.exp(-1 * self.alpha * self.trial)
+            # self.epsilon = math.pow(self.alpha, self.trial)
+            # self.epsilon = math.pow(self.trial, -2)
+            # self.epsilon = math.cos(self.alpha * self.trial)
 
         return None
 
@@ -69,7 +74,8 @@ class LearningAgent(Agent):
         #   If it is not, create a dictionary in the Q-table for the current 'state'
         #   For each action, set the Q-value for the state-action pair to 0
         
-        state = (waypoint,inputs)
+        state = waypoint, inputs['light'], inputs['oncoming'], inputs['right'], inputs['left']
+        self.createQ(state)
 
         return state
 
@@ -110,7 +116,6 @@ class LearningAgent(Agent):
         # Set the agent state and default action
         self.state = state
         self.next_waypoint = self.planner.next_waypoint()
-        action = None
 
         ########### 
         ## TO DO ##
@@ -118,10 +123,14 @@ class LearningAgent(Agent):
         # When not learning, choose a random action
         # When learning, choose a random action with 'epsilon' probability
         #   Otherwise, choose an action with the highest Q-value for the current state
-        if not self.learning:
-            action = random.choice(self.valid_actions)
-        else:
+        action = random.choice(self.valid_actions)
 
+        if self.learning:
+            if self.epsilon < random.random():
+                action = random.choice(self.valid_actions)
+            else:
+                action = self.get_maxQ(state)
+            
  
         return action
 
@@ -136,7 +145,9 @@ class LearningAgent(Agent):
         ###########
         # When learning, implement the value iteration update rule
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
-        self.Q[self.state][action] = (1-self.alpha) * self.Q[self.state][action] + self.alpha * reward
+        print self.Q
+        if action != None:
+            self.Q[self.state][action] = (1-self.alpha) * self.Q[self.state][action] + self.alpha * reward
 
         return
 
@@ -173,7 +184,7 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent, learning=True, epsilon=0.01, alpha=0.01)
+    agent = env.create_agent(LearningAgent, learning=True, epsilon=1, alpha=0.9)
     
     ##############
     # Follow the driving agent
@@ -196,7 +207,7 @@ def run():
     # Flags:
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05 
     #   n_test     - discrete number of testing trials to perform, default is 0
-    sim.run(tolerance=0.1, n_test=10)
+    sim.run(tolerance=0.01,n_test=10)
 
 
 if __name__ == '__main__':
