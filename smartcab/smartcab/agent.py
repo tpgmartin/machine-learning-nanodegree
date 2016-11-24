@@ -74,7 +74,7 @@ class LearningAgent(Agent):
         #   If it is not, create a dictionary in the Q-table for the current 'state'
         #   For each action, set the Q-value for the state-action pair to 0
         
-        state = waypoint, inputs['light'], inputs['oncoming'], inputs['right'], inputs['left']
+        state = (waypoint, inputs['light'], inputs['oncoming'], inputs['right'], inputs['left'])
         self.createQ(state)
 
         return state
@@ -126,12 +126,12 @@ class LearningAgent(Agent):
         action = random.choice(self.valid_actions)
 
         if self.learning:
-            if self.epsilon < random.random():
+            if self.epsilon > random.random():
                 action = random.choice(self.valid_actions)
             else:
                 action = self.get_maxQ(state)
-            
- 
+        
+        # want to handle 'None' action
         return action
 
 
@@ -145,9 +145,8 @@ class LearningAgent(Agent):
         ###########
         # When learning, implement the value iteration update rule
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
-        print self.Q
-        if action != None:
-            self.Q[self.state][action] = (1-self.alpha) * self.Q[self.state][action] + self.alpha * reward
+        # if action != None: # should be able to remove this line
+        self.Q[self.state][action] = (1-self.alpha) * self.Q[self.state][action] + self.alpha * reward
 
         return
 
@@ -184,7 +183,7 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent, learning=True, epsilon=1, alpha=0.9)
+    agent = env.create_agent(LearningAgent, learning=True, epsilon=1, alpha=0.01)
     
     ##############
     # Follow the driving agent
