@@ -80,7 +80,7 @@ class LearningAgent(Agent):
         return state
 
 
-    def get_maxQ(self, state):
+    def get_actions_maxQ(self):
         """ The get_max_Q function is called when the agent is asked to find the
             maximum Q-value of all actions based on the 'state' the smartcab is in. """
 
@@ -88,10 +88,19 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Calculate the maximum Q-value of all actions for a given state
+        maxQ = 0
+        actions = []
 
-        maxQ = max(self.Q[self.state], key=(lambda key: self.Q[self.state][key]))
-
-        return maxQ 
+        for action in self.Q[self.state]:
+            Qvalue = self.Q[self.state][action]
+            if maxQ < Qvalue:
+                maxQ = Qvalue
+                del actions[:]
+                actions.append(action)
+            elif maxQ == Qvalue:
+                actions.append(action)
+        
+        return actions 
 
 
     def createQ(self, state):
@@ -128,7 +137,7 @@ class LearningAgent(Agent):
             if self.epsilon > random.random():
                 action = random.choice(self.valid_actions)
             else:
-                action = self.get_maxQ(state)
+                action = random.choice(self.get_actions_maxQ())
         else:
             action = random.choice(self.valid_actions)
         
@@ -146,7 +155,8 @@ class LearningAgent(Agent):
         ###########
         # When learning, implement the value iteration update rule
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
-        self.Q[self.state][action] = (1-self.alpha) * self.Q[self.state][action] + self.alpha * reward
+        if self.learning:
+            self.Q[self.state][action] = (1-self.alpha) * self.Q[self.state][action] + self.alpha * reward
 
         return
 
