@@ -4,12 +4,8 @@ Tom Martin
 3rd December 2016
 
 ## Proposal
-_(approx. 2-3 pages)_
 
 ### Domain Background
-_(approx. 1-2 paragraphs)_
-
-In this section, provide brief details on the background information of the domain from which the project is proposed. Historical information relevant to the project should be included. It should be clear how or why a problem in the domain can or should be solved. Related academic research should be appropriately cited in this section, including why that research is relevant. Additionally, a discussion of your personal motivation for investigating a particular problem in the domain is encouraged but not required.
 
 My project will examine the MNIST database of handwritten digits. This is a very 
 well known dataset having attracted a great deal of academic attention since its 
@@ -19,42 +15,44 @@ of machine learning classifiers, such as [linear classifiers](http://yann.lecun.
 [k-nearest neighbours](http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=E0F3BDC7642FBA1D8E2811526BD0E596?doi=10.1.1.106.3963&rep=rep1&type=pdf)
 , and a range of 
 [neural network implementations](https://www.microsoft.com/en-us/research/publication/best-practices-for-convolutional-neural-networks-applied-to-visual-document-analysis/).
-
+There have therefore been a number of different approaches shown to be suitable 
+to classify the dataset correctly. This paper in particular by 
+[Nolan Hartwick](https://cseweb.ucsd.edu/~jmcauley/cse190/reports/fa15/025.pdf) 
+is particularly relevant for this projet as he has provide a clear analysis of 
+the dataset without any further preprocessing with an SVM classifier. For these 
+reasons, I will focus on this paper later on in this proposal. 
 
 ### Problem Statement
-_(approx. 1 paragraph)_
-
-In this section, clearly describe the problem that is to be solved. The problem
-described should be well defined and should have at least one relevant 
-potential solution. Additionally, describe the problem thoroughly such that it
-is clear that the problem is quantifiable (the problem can be expressed in
-mathematical or logical terms) , measurable (the problem can be measured by
-some metric and clearly observed), and replicable (the problem can be
-reproduced and occurs more than once).
 
 The capstone should attempt to train and tune a classifier that is able to 
-correctly determine the handwritten number from the supplied image. The success 
-of the classifier will be measured using    
+correctly determine the number intended from the supplied image of a 
+handwritten sample. The model produced will be trained, tested and validated 
+against the supplied dataset.  The success of the classifier will be measured 
+using the Scikit-Learn metric's module `classification_report` function, in 
+particular I will focus on the recall ratio, which gives the error rate of the 
+classifier. In this the case the proportion of wrongly classified images.    
 
 
 ### Datasets and Inputs
 
-The MNIST dataset contatins 70000 samples of handwritten digits, labelled from 0 to 9. 
-These are split into subsamples of 60000 and 10000 for training and testing respectively.
-The samples themselved contains have been centred and normalised to a grid size 
-of 28-by-28 pixels, with each training entry composed of 784 features, 
-corresponding the greyscale level for each pixel. The MNIST dataset in this 
-case will be the [MNIST original](http://mldata.org/repository/data/viewslug/mnist-original/)
+The MNIST dataset contatins 70000 samples of handwritten digits, labelled from 
+0 to 9. These are split into subsamples of 60000 and 10000 for training and 
+testing respectively. The samples themselved contains have been centred and 
+normalised to a grid size of 28-by-28 pixels, with each training entry composed
+of 784 features, corresponding the greyscale level for each pixel. The MNIST 
+dataset in this case will be the 
+[MNIST original](http://mldata.org/repository/data/viewslug/mnist-original/)
 dataset obtained via the [mldata](http://mldata.org/) repository using 
 SciKit-Learn's `datasets.fetch_mldata` method.
 
 On a historical note,this dataset is the result of subsampling the original 
-NIST dataset so that is was overall more consistent, and more suitable for machine learning: mixing together the 
-original training and testing sets. The samples were collected from a combination of 
-American Census Bureau employees and American high school students.
+NIST dataset so that is was overall more consistent, and more suitable for 
+machine learning: mixing together the original training and testing sets. The 
+samples were collected from a combination of American Census Bureau employees 
+and American high school students.
 
-This dataset contains both training and testing samples, so it will be used both to train 
-and evaluate the classifier. 
+This dataset contains both training and testing samples, so no further data is 
+needed to evaluate the classifier. 
 
 ### Solution Statement
 
@@ -98,8 +96,25 @@ evaluation metric(s) are derived and provide an example of their mathematical
 representations (if applicable). Complex evaluation metrics should be clearly 
 defined and quantifiable (can be expressed in mathematical or logical terms).
 
-The evaluation metric for this problem are given by the error rate percentage of 
-previous studies
+The evaluation metric for this model will be the error rate, this is to enable 
+a direct comparison with the benchmark, which calculates this value in the 
+paper. We noted above that the error rate can be derived from the recall rate.
+A supervised classfier such as SVM has known labelled data, so we can determine 
+ 
+The recall rate is the ratio to true positives (tp) divided by the sum of true 
+positives and false negatives (fn), 
+
+```math
+recall = tp / (tp + fn)
+```
+
+Intuitively this is the rate at which the classifier correctly classifies the 
+samples. From this, the error rate or rate at which the classifier wrongly 
+classifies the samples can be derived,
+
+```math
+error = 1 - (tp / (tp + fn)) = fn / (tp + fn)
+```
 
 ### Project Design
 _(approx. 1 page)_
@@ -128,6 +143,8 @@ are just a pixel-by-pixel greyscale score.
 Due to the previous success of such classifiers and the wealth of related 
 former studies, this project will use a SVM classifier. To both optimise and 
 evaluate the classifier a test-training split will be done
+
+Talk about recall rate
 
 * No additonal preprocessing of the data will be required
 * Use k-fold cross validation for parameter optimisation
