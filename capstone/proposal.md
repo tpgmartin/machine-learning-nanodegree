@@ -131,10 +131,16 @@ study.
 
 ### References
 
-[1] [http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf](http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf)
-[2] [https://people.eecs.berkeley.edu/~malik/cs294/decoste-scholkopf.pdf](https://people.eecs.berkeley.edu/~malik/cs294/decoste-scholkopf.pdf)
-[3] [http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=E0F3BDC7642FBA1D8E2811526BD0E596?doi=10.1.1.106.3963&rep=rep1&type=pdf](http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=E0F3BDC7642FBA1D8E2811526BD0E596?doi=10.1.1.106.3963&rep=rep1&type=pdf)
-[4] [https://www.microsoft.com/en-us/research/publication/best-practices-for-convolutional-neural-networks-applied-to-visual-document-analysis/](https://www.microsoft.com/en-us/research/publication/best-practices-for-convolutional-neural-networks-applied-to-visual-document-analysis/)
-[5] [https://cseweb.ucsd.edu/~jmcauley/cse190/reports/fa15/025.pdf](https://cseweb.ucsd.edu/~jmcauley/cse190/reports/fa15/025.pdf)
-[6] [http://mldata.org/repository/data/viewslug/mnist-original/](http://mldata.org/repository/data/viewslug/mnist-original/)
-[7] [http://yann.lecun.com/exdb/mnist/](http://yann.lecun.com/exdb/mnist/)
+[1] http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf
+
+[2] https://people.eecs.berkeley.edu/~malik/cs294/decoste-scholkopf.pdf
+
+[3] http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=E0F3BDC7642FBA1D8E2811526BD0E596?doi=10.1.1.106.3963&rep=rep1&type=pdf
+
+[4] https://www.microsoft.com/en-us/research/publication/best-practices-for-convolutional-neural-networks-applied-to-visual-document-analysis/
+
+[5] https://cseweb.ucsd.edu/~jmcauley/cse190/reports/fa15/025.pdf
+
+[6] http://mldata.org/repository/data/viewslug/mnist-original/
+
+[7] http://yann.lecun.com/exdb/mnist/
