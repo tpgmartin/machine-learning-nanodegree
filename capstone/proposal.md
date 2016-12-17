@@ -1,11 +1,16 @@
 # Machine Learning Engineer Nanodegree
 ## Capstone Proposal
 Tom Martin  
-3rd December 2016
+17th December 2016
 
 ## Proposal
 
 ### Domain Background
+
+__required__: it is for the best that you include one or two phrases explaining why 
+handwritten automatic recognition is a relevant problem to be tackled. This 
+should sound like if you were explaining why you would want to study this 
+problem for someone who isn't a machine learning researcher.
 
 My project will examine the MNIST database of handwritten digits. This is a very 
 well known dataset having attracted a great deal of academic attention since its 
@@ -31,6 +36,12 @@ classifier. In this the case the proportion of wrongly classified images.
 
 ### Datasets and Inputs
 
+__suggestion__: include some sample images from the dataset to illustrate how 
+the input data looks like.
+
+__required__: add some discussion around the class labels distribution, this 
+will help you justify the evaluation metrics used.
+
 The MNIST dataset contatins 70000 samples of handwritten digits, labelled from 
 0 to 9. These are split into subsamples of 60000 and 10000 for training and 
 testing respectively. The samples themselved contains have been centred and 
@@ -49,6 +60,14 @@ This dataset contains both training and testing samples, so no further data is
 needed to evaluate the classifier. 
 
 ### Solution Statement
+
+__suggestion__: when you mention something like the following it is often 
+advisable that you provide some citations to back up your claim.
+
+"THERE ARE ALSO A NUMBER OF ACADEMIC STUDIES, MENTIONED ABOVE, THAT HAVE HAD 
+SUCCESS WITH SVM CLASSIFIERS"
+
+__suggestion__: you should mention the need for image preprocessing here.
 
 I propose using a SVM classifier to train a solution that, with a reasonable 
 level of accuracy, correctly map a handwritten sample to the correct digit. 
@@ -80,6 +99,21 @@ testing set, a direct comparison with this paper's results is possible.
 
 ### Evaluation Metrics
 
+__required__: add at least a short explanation about what is a confusion matrix 
+and its relevance to your project. In fact, it is a good choice to show it in 
+the your project as you can check which digits your solution is having a hard 
+time to classify or is confusing.
+
+"A SUPERVISED CLASSFIER SUCH AS SVM HAS KNOWN LABELLED DATA, SO WE CAN 
+DETERMINE THE NUMBER OF TRUE POSITIVES AND FALSE POSITIVES, THESE COMPRISE 
+QUADRANTS OF A CONFUSION MATRIX."
+
+__required__: you do a good job on explaining 'how' to calculate the metrics, 
+but you are missing a sustainable justification of 'why' these metrics are 
+relevant to this project. For example, why don't you use accuracy? Would you 
+be interested in the error rate per digit? Is it possible to obtain that using 
+your current metrics?
+
 The evaluation metric for this model will be the error rate, this is to enable 
 a direct comparison with the benchmark, which calculates this value in the 
 paper. We noted above that the error rate can be derived from the recall rate.
@@ -106,6 +140,28 @@ This is also known as the false negative rate. The error rate will be
 calculated using the SciKit-Learn `metrics.recall_score` method.
 
 ### Project Design
+
+__required__: the following is not a valid justification
+
+"SECONDLY, TO FORM A MEANINGFUL COMPARISON WITH THE BENCHMARK STUDY, WE WANT A 
+COMPARATIVE DATASET TO BEGIN WITH AND IN THIS CASE THE PARTICULAR STUDY 
+PERFORMED NO PREPROCESSING EITHER."
+
+You will lose a lot of learning opportunities by not trying to preprocess the 
+data, remember that you are using SVM and not a CNN (which can do pretty well 
+without further preprocessing), so it would make more sense to do some 
+preprocessing (such as feature extraction from MNIST). Take a look on these 
+works:
+
+* [Feature Extraction of Handwritten Characters Using Supervised and 
+Unsupervised Independent Component Analysis by OZAWA, SAKAGUCHI and KOTANI](http://www2.kobe-u.ac.jp/~ozawasei/pub/sci01.pdf)
+* [Simple Method for High-Performance Digit Recognition Based on Sparse Coding 
+by Lausch, Barth and Martinetz](http://www.inb.uni-luebeck.de/publications/pdfs/LaBaMa08c.pdf)
+* Also, you can try several simple methods available from SKLearn directly, 
+such as 
+[PCA](http://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html). 
+Also, [scikit-image](http://scikit-image.org/) has lots of interesting 
+algorithms already implemented.
 
 This project will follow a typical machine workflow, starting from the dataset 
 acquisition, then the model generation, and then an evaluation and optimisation 
