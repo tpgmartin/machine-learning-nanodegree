@@ -7,19 +7,20 @@ Tom Martin
 
 ### Domain Background
 
-__required__: it is for the best that you include one or two phrases explaining why 
-handwritten automatic recognition is a relevant problem to be tackled. This 
-should sound like if you were explaining why you would want to study this 
-problem for someone who isn't a machine learning researcher.
-
 My project will examine the MNIST database of handwritten digits. This is a very 
 well known dataset having attracted a great deal of academic attention since its 
-inception. Over the years, it has proved fruitful territory for examining a range
-of machine learning classifiers, such as linear classifiers[1], svm[2], 
-k-nearest neighbours[3], and a range of neural network implementations[4].
+inception. More broadly, the analyis of automated handwriting recognition has 
+applications for fields where it is important to quickly and securely process 
+handwritten documents at scale. For instance, this can be useful in processing
+historical documents, input to handheld devices via a stylus or pen, or 
+determining authorship of incriminating documents.
+
+Over the years, it has proved fruitful territory for examining a range
+of machine learning classifiers, such as [linear classifiers][1], [svm][2], 
+[k-nearest neighbours][3], and a range of [neural network implementations][4].
 There have therefore been a number of different approaches shown to be suitable 
-to classify the dataset correctly. This paper in particular by Hartwick[5] is 
-particularly relevant for this projet as he has provide a clear analysis of the 
+to classify the dataset correctly. A paper by [Hartwick][5] is particularly 
+relevant for this projet as he has provided a clear analysis of the 
 dataset without any further preprocessing with an SVM classifier. For these 
 reasons, I will focus on this paper later on in this proposal. 
 
@@ -36,19 +37,23 @@ classifier. In this the case the proportion of wrongly classified images.
 
 ### Datasets and Inputs
 
-__suggestion__: include some sample images from the dataset to illustrate how 
-the input data looks like.
-
-__required__: add some discussion around the class labels distribution, this 
-will help you justify the evaluation metrics used.
-
 The MNIST dataset contatins 70000 samples of handwritten digits, labelled from 
 0 to 9. These are split into subsamples of 60000 and 10000 for training and 
 testing respectively. The samples themselved contains have been centred and 
 normalised to a grid size of 28-by-28 pixels, with each training entry composed
 of 784 features, corresponding the greyscale level for each pixel. The MNIST 
-dataset in this case will be the MNIST original[6] dataset obtained via the 
-mldata repository using SciKit-Learn's `datasets.fetch_mldata` method.
+dataset in this case will be the [MNIST original][6] dataset obtained via the 
+mldata repository using SciKit-Learn's `datasets.fetch_mldata` method. A sample 
+of the dataset is given below.
+
+![Sample of MNIST Dataset](./images/mnist_sample.png "Sample of MNIST Dataset")
+
+The class labels in the testing set are roughly uniformly distributed, with the 
+number of occurences of each label ranging from around 6300 and 7900. The 
+distribution is shown graphically below. This distribution of labels means that 
+no special sampling needs to take place to train and test correctly.
+
+![Frequency of Occurence of Class Labels](./images/frequency_of_occurence_of_class_labels.png "Frequency of Occurence of Class Labels")
 
 On a historical note,this dataset is the result of subsampling the original 
 NIST dataset so that is was overall more consistent, and more suitable for 
@@ -73,7 +78,7 @@ I propose using a SVM classifier to train a solution that, with a reasonable
 level of accuracy, correctly map a handwritten sample to the correct digit. 
 A supervised classifier should be an appropriate solution to the problem as we 
 have training data. There are also a number of academic studies, mentioned 
-above, that have had success with SVM classifiers. The trained classifier can 
+above, that have had success with [SVM classifiers][2]. The trained classifier can 
 be evaluated using a confusion matrix, and derived metrics such as f1 score, to 
 determine its degree of success. To evaluate the trained model thoroughly, 
 k-fold cross validation will be used to get a representative performance score 
@@ -84,7 +89,7 @@ the datasets using a SVM classifier, which have accuracies around 99%.
 
 This dataset is very well studied and as such, there are many comparable 
 studies to check against. For the project, I will make direct comparison to 
-the paper referenced above by Hartwick[5]. This paper produces results for a 
+the paper referenced above by [Hartwick][5]. This paper produces results for a 
 SVM classifier with Guassian kernel, with parameters,
 
 ```math
@@ -187,16 +192,30 @@ study.
 
 ### References
 
-[1] http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf
+[1]: http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf "Gradient-Based Learning Applied to Document Recognition"
 
-[2] https://people.eecs.berkeley.edu/~malik/cs294/decoste-scholkopf.pdf
+[2]: https://people.eecs.berkeley.edu/~malik/cs294/decoste-scholkopf.pdf "Training Invariant Support Vector Machines"
 
-[3] http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=E0F3BDC7642FBA1D8E2811526BD0E596?doi=10.1.1.106.3963&rep=rep1&type=pdf
+[3]: http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=E0F3BDC7642FBA1D8E2811526BD0E596?doi=10.1.1.106.3963&rep=rep1&type=pdf "Deformation Models for Image Recognition"
 
-[4] https://www.microsoft.com/en-us/research/publication/best-practices-for-convolutional-neural-networks-applied-to-visual-document-analysis/
+[4]: https://www.microsoft.com/en-us/research/publication/best-practices-for-convolutional-neural-networks-applied-to-visual-document-analysis/ "Best Practices for Convolutional Neural Networks Applied to Visual Document Analysis"
 
-[5] https://cseweb.ucsd.edu/~jmcauley/cse190/reports/fa15/025.pdf
+[5]: https://cseweb.ucsd.edu/~jmcauley/cse190/reports/fa15/025.pdf "Reproducing Results of Guassian Kernel SVM classifers on the MNIST Dataset"
 
-[6] http://mldata.org/repository/data/viewslug/mnist-original/
+[6]: http://mldata.org/repository/data/viewslug/mnist-original/ "MNIST (original)"
 
-[7] http://yann.lecun.com/exdb/mnist/
+[7]: http://yann.lecun.com/exdb/mnist/ "The MNIST Database of Handwritten Digits"
+
+[1] http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf "Gradient-Based Learning Applied to Document Recognition"
+
+[2] https://people.eecs.berkeley.edu/~malik/cs294/decoste-scholkopf.pdf "Training Invariant Support Vector Machines"
+
+[3] http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=E0F3BDC7642FBA1D8E2811526BD0E596?doi=10.1.1.106.3963&rep=rep1&type=pdf "Deformation Models for Image Recognition"
+
+[4] https://www.microsoft.com/en-us/research/publication/best-practices-for-convolutional-neural-networks-applied-to-visual-document-analysis/ "Best Practices for Convolutional Neural Networks Applied to Visual Document Analysis"
+
+[5] https://cseweb.ucsd.edu/~jmcauley/cse190/reports/fa15/025.pdf "Reproducing Results of Guassian Kernel SVM classifers on the MNIST Dataset"
+
+[6] http://mldata.org/repository/data/viewslug/mnist-original/ "MNIST (original)"
+
+[7] http://yann.lecun.com/exdb/mnist/ "The MNIST Database of Handwritten Digits"
