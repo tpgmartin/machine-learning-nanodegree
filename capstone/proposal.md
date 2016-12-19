@@ -104,45 +104,60 @@ testing set, a direct comparison with this paper's results is possible.
 
 ### Evaluation Metrics
 
-__required__: add at least a short explanation about what is a confusion matrix 
-and its relevance to your project. In fact, it is a good choice to show it in 
-the your project as you can check which digits your solution is having a hard 
-time to classify or is confusing.
-
-"A SUPERVISED CLASSFIER SUCH AS SVM HAS KNOWN LABELLED DATA, SO WE CAN 
-DETERMINE THE NUMBER OF TRUE POSITIVES AND FALSE POSITIVES, THESE COMPRISE 
-QUADRANTS OF A CONFUSION MATRIX."
-
-__required__: you do a good job on explaining 'how' to calculate the metrics, 
-but you are missing a sustainable justification of 'why' these metrics are 
-relevant to this project. For example, why don't you use accuracy? Would you 
-be interested in the error rate per digit? Is it possible to obtain that using 
-your current metrics?
-
 The evaluation metric for this model will be the error rate, this is to enable 
 a direct comparison with the benchmark, which calculates this value in the 
 paper. We noted above that the error rate can be derived from the recall rate.
 A supervised classfier such as SVM has known labelled data, so we can determine 
-the number of true positives and false positives, these comprise quadrants of a 
-confusion matrix. At greater length, true positives represent the number of 
-correctly identified labels, whereas fasle negatives represent the number of 
-incorrectly rejected labels.The recall rate is the ratio to true positives 
-(tp) divided by the sum of true positives and false negatives (fn), 
+the number of true positives, false positives, and false 
+negatives these are ultimately derived from the confusion matrix. To be clear, 
+these terms are defined as follows:
+
+* True positives: Entries that are correctly labelled
+* False positives: Entries that a wrongly identified with a given label
+* False negatives: Entries for a given label that are wrongly identified with 
+other labels
+
+In the general case, a confusion matrix is simply a matrix illustrating the 
+mapping from the true labels to the predicted labels. Elements along the 
+diagonal represent a correct classification, whereas the off-diagonal represent
+a misclassification. In general, a confusion matrix can be a useful check to 
+see what digits in particular are most likely confused for one another. From 
+here we can [derive][8] both the recall and precision.
+
+Precision is the result of the number of true positives divided by the sum of 
+true positives and false negatives. This can be given by the following 
+equation,
+
+```math
+precision = tp / (tp + fp)
+```
+
+where tp and fp stand for true positive and false positive respectively.
+
+Recall is the result of dividing the true positives by the sum of true 
+positives with false negatives. This can be given as follows,
 
 ```math
 recall = tp / (tp + fn)
 ```
 
-Intuitively this is the rate at which the classifier correctly classifies the 
-samples. From this, the error rate or rate at which the classifier wrongly 
+where tp and fn stand for true positive and false negative respectively.
+From this, the error rate or rate at which the classifier wrongly 
 classifies the samples can be derived,
 
 ```math
 error rate = 1 - (tp / (tp + fn)) = fn / (tp + fn)
 ```
 
-This is also known as the false negative rate. The error rate will be 
-calculated using the SciKit-Learn `metrics.recall_score` method.
+which is is also known as the false negative rate. The error rate per digit 
+could be derived similarly, but on a digit-by-digit basis, as given by the 
+confusion matrix above.
+
+These metrics altogether will give us a means to determine how well the 
+classifier correctly labels the digits as well the error rate per digit.The 
+error rate as well as all the other metrics discussed in this section will be 
+calculated using the SciKit-Learn `metrics.classification_report` and 
+`metrics.confusion_matrix` methods.
 
 ### Project Design
 
@@ -206,6 +221,8 @@ study.
 
 [7]: http://yann.lecun.com/exdb/mnist/ "The MNIST Database of Handwritten Digits"
 
+[8]: http://softclassval.r-forge.r-project.org/2013/2013-01-03-ChemomIntellLabSystTheorypaper.html "Validation of Soft Classification Models using Partial Class Memberships: An Extended Concept of Sensitivity & Co. applied to Grading of Astrocytoma Tissues"
+
 [1] http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf "Gradient-Based Learning Applied to Document Recognition"
 
 [2] https://people.eecs.berkeley.edu/~malik/cs294/decoste-scholkopf.pdf "Training Invariant Support Vector Machines"
@@ -219,3 +236,5 @@ study.
 [6] http://mldata.org/repository/data/viewslug/mnist-original/ "MNIST (original)"
 
 [7] http://yann.lecun.com/exdb/mnist/ "The MNIST Database of Handwritten Digits"
+
+[8] http://softclassval.r-forge.r-project.org/2013/2013-01-03-ChemomIntellLabSystTheorypaper.html "Validation of Soft Classification Models using Partial Class Memberships: An Extended Concept of Sensitivity & Co. applied to Grading of Astrocytoma Tissues"
