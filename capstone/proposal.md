@@ -1,7 +1,7 @@
 # Machine Learning Engineer Nanodegree
 ## Capstone Proposal
 Tom Martin  
-21st December 2016
+2nd January 2017
 
 ## Proposal
 
@@ -31,9 +31,13 @@ correctly determine the number intended from the supplied image of a
 handwritten sample. The model produced will be trained, tested and validated 
 against the supplied dataset.  The success of the classifier will be measured 
 using the Scikit-Learn metric's module `metrics.classification_report` and 
-`metrics.confusion_matrix` functions, in particular I will focus on the recall 
-ratio, which gives the error rate of the classifier: In this the case the 
-proportion of wrongly classified images.    
+`metrics.confusion_matrix` functions, in particular I will focus on the recall, 
+precision and confusion matrix. In particular from the recall rate we can 
+derive the error rate in order to enable a direct comparsion with the benchmark 
+model below. It should be mentioned that these metrics are 
+typically used in problems of binary classifaction, but can be generalised for 
+an arbitrary number of classes[6]. This is covered in more detail in the 
+"Evaluation Metrics" section.
 
 
 ### Datasets and Inputs
@@ -43,7 +47,7 @@ The MNIST dataset contatins 70000 samples of handwritten digits, labelled from
 testing respectively. The samples themselve have been centred and normalised 
 to a grid size of 28-by-28 pixels, with each training entry composed of 784 
 features, corresponding the greyscale level for each pixel. The MNIST 
-dataset in this case will be the MNIST original[6] dataset obtained via the 
+dataset in this case will be the MNIST original[7] dataset obtained via the 
 mldata repository using SciKit-Learn's `datasets.fetch_mldata` method. A sample 
 of the dataset is given below.
 
@@ -77,10 +81,10 @@ illustrate - can produce two-dimensional plot of classifying boundaries.
 This is especially useful for a dataset both as large and feature-rich as the 
 MNIST dataset. It has been shown that in general PCA does not negatively 
 impact the accuracy of a classifier, and has even been shown to boost the 
-accuracy of the SVM classfier[7].
+accuracy of the SVM classfier[9].
 
 The trained classifier can be evaluated using a confusion matrix, and derived 
-metrics such as f1 score, to determine its degree of success. To evaluate the 
+metrics to determine its degree of success. To evaluate the 
 trained model thoroughly, k-fold cross validation will be used to get a 
 representative performance score of the model. Furthermore, we can consider a 
 number of previous models[8] of the dataset using a SVM classifier, which have 
@@ -124,7 +128,7 @@ mapping from the true labels to the predicted labels. Elements along the
 diagonal represent a correct classification, whereas the off-diagonal represent
 a misclassification. A confusion matrix can be a useful check to 
 see what digits in particular are most likely confused for one another. From 
-here we can derive[9] both the recall and precision.
+here we can derive[6] both the recall and precision.
 
 Precision is the result of the number of true positives divided by the sum of 
 true positives and false negatives. This can be given by the following 
@@ -166,7 +170,7 @@ calculated using the SciKit-Learn `metrics.classification_report` and
 This project will follow a typical machine workflow, starting from the dataset 
 acquisition, then preprocessing, model generation, and then an evaluation and 
 optimisation process.Preprocessing will be done using SciKit-Learn's `decomposition.PCA` method. 
-Following the study by Lei and Govindaraju[7] I will choose to model with 
+Following the study by Lei and Govindaraju[8] I will choose to model with 
 several different numbers of principal components between 10 and 100, as this 
 is where they found a boosted classifier performance. 
 
@@ -195,13 +199,13 @@ A1D8E2811526BD0E596?doi=10.1.1.106.3963&rep=rep1&type=pdf "Deformation Models fo
 
 [5] https://cseweb.ucsd.edu/~jmcauley/cse190/reports/fa15/025.pdf "Reproducing Results of Guassian Kernel SVM classifers on the MNIST Dataset"
 
-[6] http://mldata.org/repository/data/viewslug/mnist-original/ "MNIST (original)"
+[6] http://softclassval.r-forge.r-project.org/2013/2013-01-03-ChemomIntellLabSys
+tTheorypaper.html "Validation of Soft Classification Models using Partial Class Memberships: An Extended Concept of Sensitivity & Co. applied to Grading of Astrocytoma Tissues"
 
-[7] https://www.researchgate.net/profile/Giovanni_Felici/publication/226795010
+[7] http://mldata.org/repository/data/viewslug/mnist-original/ "MNIST (original)"
+
+[8] https://www.researchgate.net/profile/Giovanni_Felici/publication/226795010
 _Feature_Selection_for_Data_Mining/links/53e413d70cf25d674e94b475.pdf#p
 age=78  "Speeding Up Multi-class SVM Evaluation by PCA and Feature Selection"
 
-[8] http://yann.lecun.com/exdb/mnist/ "The MNIST Database of Handwritten Digits"
-
-[9] http://softclassval.r-forge.r-project.org/2013/2013-01-03-ChemomIntellLabSys
-tTheorypaper.html "Validation of Soft Classification Models using Partial Class Memberships: An Extended Concept of Sensitivity & Co. applied to Grading of Astrocytoma Tissues"
+[9] http://yann.lecun.com/exdb/mnist/ "The MNIST Database of Handwritten Digits"
