@@ -28,36 +28,18 @@ dataset without any further preprocessing with an SVM classifier. For these
 reasons, this paper will form a benchmark for the following analysis. 
 
 ### Problem Statement
-In this section, you will want to clearly define the problem that you are 
-trying to solve, including the strategy (outline of tasks) you will use to 
-achieve the desired solution. You should also thoroughly discuss what the 
-intended solution will be for this problem. Questions to ask yourself when 
-writing this section:
-- _Is the problem statement clearly defined? Will the reader understand what 
-you are expecting to solve?_
-- _Have you thoroughly discussed how you will attempt to solve the problem?_
-- _Is an anticipated solution clearly defined? Will the reader understand what 
-results you are looking for?_
-
-Section from proposal:
-* Problem statement
-* Solution statement
-
--> What kind of kernel will be used?
--> Use accuracy metric instead, justify why
 
 The capstone will attempt to train and tune a SVM classifier that is able to 
 correctly determine the number intended from the supplied image of a 
 handwritten sample. The model produced will be trained, tested and validated 
 against the supplied dataset.  The success of the classifier will be measured 
-using the Scikit-Learn metric's module `metrics.classification_report` and 
-`metrics.confusion_matrix` functions, in particular I will focus on the recall, 
-precision and confusion matrix. In particular from the recall rate we can 
-derive the error rate in order to enable a direct comparsion with the benchmark 
-model below. It should be mentioned that these metrics are 
+using the Scikit-Learn metric's module `metrics.accuracy_score`,
+`metrics.confusion_matrix`, and `metrics.recall_score`. In particular from the 
+recall rate we can derive the error rate in order to enable a direct comparsion with the benchmark 
+model below. It should be mentioned that some of these metrics are 
 typically used in problems of binary classifaction, but can be generalised for 
 an arbitrary number of classes[6]. This is covered in more detail in the 
-"Evaluation Metrics" section.
+"Metrics" section.
 
 I propose using a SVM classifier to train a solution that, with a reasonable 
 level of accuracy, correctly maps a handwritten sample to the correct digit. 
@@ -71,7 +53,11 @@ illustrate - can produce two-dimensional plot of classifying boundaries.
 This is especially useful for a dataset both as large and feature-rich as the 
 MNIST dataset. It has been shown that in general PCA does not negatively 
 impact the accuracy of a classifier, and has even been shown to boost the 
-accuracy of the SVM classfier[9].
+accuracy of the SVM classfier[9]. I will evaluate the classfier using two 
+different kernels: Gaussian, or RBF kernel, and polynomial. The choice is for 
+two reasons: Firstly, Both these kernels are useful in cases such as thus where 
+the data set is not linearly separable. Secondly, I want to make a direct comparison 
+with the benchmark study, which used the Gaussian kernel.
 
 The trained classifier can be evaluated using a confusion matrix, and derived 
 metrics to determine its degree of success. To evaluate the 
@@ -91,38 +77,86 @@ clearly discussed and defined?_
 - _Have you provided reasonable justification for the metrics chosen based on 
 the problem and solution?_
 
-Section from proposal:
-* Evaluation metrics
+The evaluation metrics for this model will be the confusion matrix, accuracy, 
+and error rate. The latter is to enable a direct comparison with the 
+benchmark, which calculates this value in the paper. We noted above that the 
+error rate can be derived from the recall rate.
 
-Will focus on accuracy, calculate error rate for benchmark comparison
-Why accuracy?
-* Should show error = 1 - accuracy
-* Data labels are evenly distributed
+
+General reasoning why these metrics???
+-> Do I want to remove the confusion matrix?
+
+Error: 1 - accuracy meaning?
+
+I will be focussing on using the confusion matrix and accuracy to evaluate the 
+classfier for the two main reasons. Firstly, the labels in the dataset are 
+fairly uniformly distributed, as shown in figure 1 below. This means we can take 
+the simpler option of just using accuracy as we do not need to consider 
+imbalances between classes - accuracy will map to other measures such as 
+precison. Secondly, this is a multi-class classification problem where we 
+are more interested in correct classifactions than misclassifications, so 
+accuracy is sufficient to meaningfully evaluate the classfier on its own.
+
+![Frequency of Occurence of Class Labels](./images/frequency_of_occurence_of_class_labels.png "Frequency of Occurence of Class Labels")
+
+A supervised classfier such as SVM has known labelled data, so we can determine 
+the number of true positives, true negatives, false positives, and false 
+negatives these are ultimately derived from the confusion matrix. To be clear, 
+these terms are defined as follows:
+
+* True positives: Entries that are correctly labelled
+* True negatives: Entries that are correctly rejected
+* False positives: Entries that a wrongly identified with a given label
+* False negatives: Entries for a given label that are wrongly identified with 
+other labels
+
+In the general case, a confusion matrix is simply a matrix illustrating the 
+mapping from the true labels to the predicted labels. Elements along the 
+diagonal represent a correct classification, whereas the off-diagonal represent
+a misclassification. A confusion matrix can be a useful check to 
+see what digits in particular are most likely confused for one another. From 
+here we can derive[6] both the accuracy and recall.
+
+
+Accuracy is given by the total number of correct classifcations, both true 
+positives and true negatives divided by the total dataset population. This 
+can be given by the following equation,
+
+```math
+accuracy = (tp + tn) / (tp + tn + fp + fn)
+```
+
+where tp, tn, fp, and fn stand for true positivem true negative, false positive, 
+false negative respectively.
+
+Recall is the result of dividing the true positives by the sum of true 
+positives with false negatives. This can be given as follows,
+
+```math
+recall = tp / (tp + fn)
+```
+
+where tp and fn stand for true positive and false negative respectively.
+From this, the error rate or rate at which the classifier wrongly 
+classifies the samples can be derived,
+
+```math
+error rate = 1 - (tp / (tp + fn)) = fn / (tp + fn)
+```
+
+which is is also known as the false negative rate. The accuracy and error rate 
+per digit could be derived similarly, but on a digit-by-digit basis.
+
+These metrics altogether will give us a means to determine how well the 
+classifier correctly labels the digits as well the error rate per digit. The 
+error rate as well as all the other metrics discussed in this section will be 
+calculated using the SciKit-Learn `metrics.accuracy_score`, 
+`metrics.confusion_matrix`, and `metrics.recall_score`. methods.
 
 ## II. Analysis
 _(approx. 2-4 pages)_
 
 ### Data Exploration
-In this section, you will be expected to analyze the data you are using for 
-the problem. This data can either be in the form of a dataset (or datasets), 
-input data (or input files), or even an environment. The type of data should be 
-thoroughly described and, if possible, have basic statistics and information 
-presented (such as discussion of input features or defining characteristics 
-about the input or environment). Any abnormalities or interesting qualities 
-about the data that may need to be addressed have been identified (such as 
-features that need to be transformed or the possibility of outliers). 
-Questions to ask yourself when writing this section:
-- _If a dataset is present for this problem, have you thoroughly discussed 
-certain features about the dataset? Has a data sample been provided to the 
-reader?_
-- _If a dataset is present for this problem, are statistics about the dataset 
-calculated and reported? Have any relevant results from this calculation been 
-discussed?_
-- _If a dataset is **not** present for this problem, has discussion been made 
-about the input space or input data for your problem?_
-- _Are there any abnormalities or characteristics about the input space or 
-dataset that need to be addressed? (categorical variables, missing values, 
-outliers, etc.)_
 
 The MNIST dataset contatins 70000 samples of handwritten digits, labelled from 
 0 to 9. These are split into subsamples of 60000 and 10000 for training and 
@@ -137,10 +171,10 @@ of the dataset is given below.
 
 The class labels in the testing set are roughly uniformly distributed, with the 
 number of occurences of each label ranging from around 6300 and 7900. The 
-distribution is shown graphically below. This distribution of labels means that 
-no special sampling needs to take place to train and test correctly.
-
-![Frequency of Occurence of Class Labels](./images/frequency_of_occurence_of_class_labels.png "Frequency of Occurence of Class Labels")
+distribution is shown graphically in figure 1 above. This distribution of 
+labels means that no special sampling needs to take place to train and test 
+correctly, and as discussed above means we can opt for the simpler choice of 
+deriving only the accuracy as the evaluation metric.
 
 On a historical note, this dataset is the result of subsampling the original 
 NIST dataset so that is was overall more consistent, and more suitable for 
@@ -159,6 +193,8 @@ yourself when writing this section:
 or input data?_
 - _Is the visualization thoroughly analyzed and discussed?_
 - _If a plot is provided, are the axes, title, and datum clearly defined?_
+
+-> Check example reports
 
 Move images and plots here
 
@@ -180,13 +216,22 @@ algorithms and techniques chosen?_
 Refer to benchmark section
 * Why SVM?
 * Why/what parameter set?
-* What kernel choice?
+* What kernel choice? Gaussian and polynomial
 * Methodology, preprocessing
 
+-> Refer to project design section
+
 ### Benchmark
-In this section, you will need to provide a clearly defined benchmark result or threshold for comparing across performances obtained by your solution. The reasoning behind the benchmark (in the case where it is not an established result) should be discussed. Questions to ask yourself when writing this section:
+In this section, you will need to provide a clearly defined benchmark result or 
+threshold for comparing across performances obtained by your solution. The 
+reasoning behind the benchmark (in the case where it is not an established 
+result) should be discussed. Questions to ask yourself when writing this section:
 - _Has some result or value been provided that acts as a benchmark for measuring performance?_
-- _Is it clear how this result or value was obtained (whether by data or by hypothesis)?_
+
+-> What metrics from benchmark?
+"The model in this paper achieves a error of around 1.4% against the MNIST 
+testing set."
+-> Also mention study that uses compression techniques
 
 This dataset is very well studied and as such, there are many comparable 
 studies to check against. For the project, I will make direct comparison to 
