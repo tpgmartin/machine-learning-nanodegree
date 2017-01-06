@@ -90,14 +90,12 @@ Error: 1 - accuracy meaning?
 
 I will be focussing on using the confusion matrix and accuracy to evaluate the 
 classfier for the two main reasons. Firstly, the labels in the dataset are 
-fairly uniformly distributed, as shown in figure 1 below. This means we can take 
+fairly uniformly distributed, as shown in figure 2 below. This means we can take 
 the simpler option of just using accuracy as we do not need to consider 
 imbalances between classes - accuracy will map to other measures such as 
 precison. Secondly, this is a multi-class classification problem where we 
 are more interested in correct classifactions than misclassifications, so 
 accuracy is sufficient to meaningfully evaluate the classfier on its own.
-
-![Frequency of Occurence of Class Labels](./images/frequency_of_occurence_of_class_labels.png "Frequency of Occurence of Class Labels")
 
 A supervised classfier such as SVM has known labelled data, so we can determine 
 the number of true positives, true negatives, false positives, and false 
@@ -154,7 +152,6 @@ calculated using the SciKit-Learn `metrics.accuracy_score`,
 `metrics.confusion_matrix`, and `metrics.recall_score`. methods.
 
 ## II. Analysis
-_(approx. 2-4 pages)_
 
 ### Data Exploration
 
@@ -184,42 +181,47 @@ and American high school students. This dataset contains both training and
 testing samples, so no further data is needed to evaluate the classifier.
 
 ### Exploratory Visualization
-In this section, you will need to provide some form of visualization that 
-summarizes or extracts a relevant characteristic or feature about the data. 
-The visualization should adequately support the data being used. Discuss why 
-this visualization was chosen and how it is relevant. Questions to ask 
-yourself when writing this section:
-- _Have you visualized a relevant characteristic or feature about the dataset 
-or input data?_
-- _Is the visualization thoroughly analyzed and discussed?_
-- _If a plot is provided, are the axes, title, and datum clearly defined?_
 
--> Check example reports
+The plot below illustrates the distribution of labels in the target data, 
+showing them to be fairly uniformly distributed. This is useful in relation to 
+the choice of evaluation metric, as noted above. Due to this uniformity, we can 
+opt for the simpler choice of using just the accuracy as we due not need to 
+consider imbalances and skew.
 
-Move images and plots here
-
-Note normalisation, greyscale of images
-
-Uniform dataset implies accuracy is better metric than precision and recall
+![Frequency of Occurence of Class Labels](./images/frequency_of_occurence_of_class_labels.png "Frequency of Occurence of Class Labels")
 
 ### Algorithms and Techniques
-In this section, you will need to discuss the algorithms and techniques you 
-intend to use for solving the problem. You should justify the use of each one 
-based on the characteristics of the problem and the problem domain. Questions 
-to ask yourself when writing this section:
-- _Are the algorithms you will use, including any default variables/parameters 
-in the project clearly defined?_
-- _Are the techniques to be used thoroughly discussed and justified?_
-- _Is it made clear how the input data or datasets will be handled by the 
-algorithms and techniques chosen?_
 
-Refer to benchmark section
-* Why SVM?
-* Why/what parameter set?
-* What kernel choice? Gaussian and polynomial
-* Methodology, preprocessing
+This report will train a scalable vector machine (SVM) classifier to correctly 
+label the samples. SVM is a way of classifying data sets with a hyperplane or 
+boundary bewteen data point clusters. This is achieved by algorithmically 
+finding the hyperplane with maximum margin, or in other words finding the line 
+that maximises the distance between itself and the points of the data set. SVM 
+is particularly powerful when dealing with nonlinear data by employing the 
+so-called kernel trick: mapping the input data points to a higher dimensional 
+feature space.
 
--> Refer to project design section
+The SVM provided by Scikit-Learn's `svm.SVC` module supports the following 
+parameters relevant for this investigation,
+* C - penalty parameter, how closely hyperplane follows the datapoints
+* kernel - the kernel choice, either RBF or polynomial
+* degree - the degree of the polynomial kernel
+* gamma - kernel coefficient, defines radius of influence for a given datapoint
+The specific parameter values will be decided using grid search cross validation 
+starting from a set of values following the relevant literature. This technique 
+is a simple and effective means of optimising the classifier, as a way of 
+justifying our initial assumptions. Other parameters not specified here will be 
+used at their default values.
+
+The classifier will be evaluated using the process of k-fold cross validation 
+to achieve a representative performance score of the model. This is a process 
+of systematically cycling through different training and validation subsets of 
+the initial training data and averaging the result. This is to ensure that we 
+account for bias in any one validation set. The performance metrics to be used 
+are discussed above.
+
+Preprocessing will be done using principal component analyis with dimension 
+reduction. This is discussed at greater length below.
 
 ### Benchmark
 In this section, you will need to provide a clearly defined benchmark result or 
@@ -228,7 +230,7 @@ reasoning behind the benchmark (in the case where it is not an established
 result) should be discussed. Questions to ask yourself when writing this section:
 - _Has some result or value been provided that acts as a benchmark for measuring performance?_
 
--> What metrics from benchmark?
+-> What metrics from benchmark? Is an accuracy given?
 "The model in this paper achieves a error of around 1.4% against the MNIST 
 testing set."
 -> Also mention study that uses compression techniques
@@ -270,22 +272,73 @@ a direct comparison with the benchmark study.
 _(approx. 3-5 pages)_
 
 ### Data Preprocessing
-In this section, all of your preprocessing steps will need to be clearly documented, if any were necessary. From the previous section, any of the abnormalities or characteristics that you identified about the dataset will be addressed and corrected here. Questions to ask yourself when writing this section:
-- _If the algorithms chosen require preprocessing steps like feature selection or feature transformations, have they been properly documented?_
-- _Based on the **Data Exploration** section, if there were abnormalities or characteristics that needed to be addressed, have they been properly corrected?_
+In this section, all of your preprocessing steps will need to be clearly 
+documented, if any were necessary. From the previous section, any of the 
+abnormalities or characteristics that you identified about the dataset will be 
+addressed and corrected here. Questions to ask yourself when writing this 
+section:
+- _If the algorithms chosen require preprocessing steps like feature selection 
+or feature transformations, have they been properly documented?_
+- _Based on the **Data Exploration** section, if there were abnormalities or 
+characteristics that needed to be addressed, have they been properly corrected?_
 - _If no preprocessing is needed, has it been made clear why?_
 
+Reference
+* Solution statement
+* Project design
+
+Using PCA with dimension reduction for feature transformation, this is to boost 
+the runtime efficiency of the classifier.
+
+Why use PCA?
+* Reduce algorithm execution time
+* Make graphical representation of analysis simpler
+* Preprocessing with PCA `decomposition.PCA`, chose several different numbers 
+of principal components between 10 and 100
+
+
 ### Implementation
-In this section, the process for which metrics, algorithms, and techniques that you implemented for the given data will need to be clearly documented. It should be abundantly clear how the implementation was carried out, and discussion should be made regarding any complications that occurred during this process. Questions to ask yourself when writing this section:
-- _Is it made clear how the algorithms and techniques were implemented with the given datasets or input data?_
-- _Were there any complications with the original metrics or techniques that required changing prior to acquiring a solution?_
-- _Was there any part of the coding process (e.g., writing complicated functions) that should be documented?_
+In this section, the process for which metrics, algorithms, and techniques 
+that you implemented for the given data will need to be clearly documented. It 
+should be abundantly clear how the implementation was carried out, and 
+discussion should be made regarding any complications that occurred during 
+this process. Questions to ask yourself when writing this section:
+- _Is it made clear how the algorithms and techniques were implemented with the 
+given datasets or input data?_
+- _Were there any complications with the original metrics or techniques that 
+required changing prior to acquiring a solution?_
+- _Was there any part of the coding process (e.g., writing complicated 
+functions) that should be documented?_
+
+Reference
+* Solution statement
+* Evaluation metrics
+* Project design
+
+Details
+
+* Using SVM classifier
+* Using RBF and polynomial kernels for comparison
+* Optimisation: Parameter selection via grid search cross validation 
+* Evaluation: k-fold cross validation
+* Metrics: accuracy, error, confusion matrix
 
 ### Refinement
-In this section, you will need to discuss the process of improvement you made upon the algorithms and techniques you used in your implementation. For example, adjusting parameters for certain models to acquire improved solutions would fall under the refinement category. Your initial and final solutions should be reported, as well as any significant intermediate results as necessary. Questions to ask yourself when writing this section:
+In this section, you will need to discuss the process of improvement you made 
+upon the algorithms and techniques you used in your implementation. For 
+example, adjusting parameters for certain models to acquire improved solutions 
+would fall under the refinement category. Your initial and final solutions 
+should be reported, as well as any significant intermediate results as 
+necessary. Questions to ask yourself when writing this section:
 - _Has an initial solution been found and clearly reported?_
-- _Is the process of improvement clearly documented, such as what techniques were used?_
-- _Are intermediate and final solutions clearly reported as the process is improved?_
+- _Is the process of improvement clearly documented, such as what techniques 
+were used?_
+- _Are intermediate and final solutions clearly reported as the process is 
+improved?_
+
+Check what can be taken out of Implementation section above
+
+Optimisation with grid search cross validation
 
 
 ## IV. Results
