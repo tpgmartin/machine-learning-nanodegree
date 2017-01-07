@@ -34,8 +34,8 @@ correctly determine the number intended from the supplied image of a
 handwritten sample. The model produced will be trained, tested and validated 
 against the supplied dataset.  The success of the classifier will be measured 
 using the Scikit-Learn metric's module `metrics.accuracy_score`,
-`metrics.confusion_matrix`, and `metrics.recall_score`. In particular from the 
-recall rate we can derive the error rate in order to enable a direct comparsion with the benchmark 
+`metrics.confusion_matrix`. In particular from the accuracy we can derive the 
+error rate in order to enable a direct comparsion with the benchmark 
 model below. It should be mentioned that some of these metrics are 
 typically used in problems of binary classifaction, but can be generalised for 
 an arbitrary number of classes[6]. This is covered in more detail in the 
@@ -67,35 +67,23 @@ number of previous models[8] of the dataset using a SVM classifier, which have
 accuracies around 99%.
 
 ### Metrics
-In this section, you will need to clearly define the metrics or calculations 
-you will use to measure performance of a model or result in your project. These 
-calculations and metrics should be justified based on the characteristics of 
-the problem and problem domain. Questions to ask yourself when writing this 
-section:
-- _Are the metrics you’ve chosen to measure the performance of your models 
-clearly discussed and defined?_
-- _Have you provided reasonable justification for the metrics chosen based on 
-the problem and solution?_
 
 The evaluation metrics for this model will be the confusion matrix, accuracy, 
 and error rate. The latter is to enable a direct comparison with the 
 benchmark, which calculates this value in the paper. We noted above that the 
-error rate can be derived from the recall rate.
-
-
-General reasoning why these metrics???
--> Do I want to remove the confusion matrix?
-
-Error: 1 - accuracy meaning?
+error rate can be derived from the accuracy.
 
 I will be focussing on using the confusion matrix and accuracy to evaluate the 
 classfier for the two main reasons. Firstly, the labels in the dataset are 
 fairly uniformly distributed, as shown in figure 2 below. This means we can take 
 the simpler option of just using accuracy as we do not need to consider 
-imbalances between classes - accuracy will map to other measures such as 
-precison. Secondly, this is a multi-class classification problem where we 
-are more interested in correct classifactions than misclassifications, so 
-accuracy is sufficient to meaningfully evaluate the classfier on its own.
+imbalances between classes - accuracy will strongly correspond to other 
+measures such as precision. Secondly, this is a multi-class classification 
+problem where we are more interested in correct classifactions than 
+misclassifications, so accuracy is sufficient to meaningfully evaluate the 
+classfier on its own. The confusion matrix will still contain useful 
+information especially if there is strong presence of misclassifications on a 
+per digit bases, which would not be clear from accuracy alone.
 
 A supervised classfier such as SVM has known labelled data, so we can determine 
 the number of true positives, true negatives, false positives, and false 
@@ -113,8 +101,7 @@ mapping from the true labels to the predicted labels. Elements along the
 diagonal represent a correct classification, whereas the off-diagonal represent
 a misclassification. A confusion matrix can be a useful check to 
 see what digits in particular are most likely confused for one another. From 
-here we can derive[6] both the accuracy and recall.
-
+here we can derive[6] the accuracy.
 
 Accuracy is given by the total number of correct classifcations, both true 
 positives and true negatives divided by the total dataset population. This 
@@ -127,29 +114,21 @@ accuracy = (tp + tn) / (tp + tn + fp + fn)
 where tp, tn, fp, and fn stand for true positivem true negative, false positive, 
 false negative respectively.
 
-Recall is the result of dividing the true positives by the sum of true 
-positives with false negatives. This can be given as follows,
+From this, the error rate or rate at which the classifier misclassifies can be 
+derived,
 
 ```math
-recall = tp / (tp + fn)
+error rate = 1 - accuracy = 1 - (tp + tn) / (tp + tn + fp + fn) = (fp + fn) / (tp + tn + fp + fn)
 ```
 
-where tp and fn stand for true positive and false negative respectively.
-From this, the error rate or rate at which the classifier wrongly 
-classifies the samples can be derived,
-
-```math
-error rate = 1 - (tp / (tp + fn)) = fn / (tp + fn)
-```
-
-which is is also known as the false negative rate. The accuracy and error rate 
-per digit could be derived similarly, but on a digit-by-digit basis.
+The accuracy and error rate per digit could be derived similarly, but on a 
+digit-by-digit basis.
 
 These metrics altogether will give us a means to determine how well the 
 classifier correctly labels the digits as well the error rate per digit. The 
 error rate as well as all the other metrics discussed in this section will be 
 calculated using the SciKit-Learn `metrics.accuracy_score`, 
-`metrics.confusion_matrix`, and `metrics.recall_score`. methods.
+`metrics.confusion_matrix` methods.
 
 ## II. Analysis
 
@@ -263,7 +242,7 @@ lables and test labels. I would like to recover some of the same results as the
 benchmark study i.e. SVM with Guassian kernel, as well as another kernel for 
 comparison. Using the training and testing data, I will use grid search 
 cross-validation during the optimisation step. Discussed at greater length 
-above, I will derive recall, precision and the confusion matrix to determine 
+above, I will derive accuracy, error rate, and confusion matrix to determine 
 the accuracy of the classifier. I will also use the error rate or false 
 negative rate to both determine the accuracy of the derived models and make 
 a direct comparison with the benchmark study. 
