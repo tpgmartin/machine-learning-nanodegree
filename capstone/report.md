@@ -34,11 +34,11 @@ correctly determine the number intended from the supplied image of a
 handwritten sample. The model produced will be trained, tested and validated 
 against the supplied dataset.  The success of the classifier will be measured 
 using the Scikit-Learn metric's module `metrics.accuracy_score`,
-`metrics.confusion_matrix`. In particular from the accuracy we can derive the 
-error rate in order to enable a direct comparsion with the benchmark 
-model below. It should be mentioned that some of these metrics are 
-typically used in problems of binary classifaction, but can be generalised for 
-an arbitrary number of classes[6]. This is covered in more detail in the 
+`metrics.confusion_matrix`. From these metrics we can derive both the error 
+rate and per digit error rate in order to enable a direct comparsion with 
+the benchmark model below. It should be mentioned that some of these metrics 
+are typically used in problems of binary classifaction, but can be generalised 
+for an arbitrary number of classes[6]. This is covered in more detail in the 
 "Metrics" section.
 
 I propose using a SVM classifier to train a solution that, with a reasonable 
@@ -46,7 +46,7 @@ level of accuracy, correctly maps a handwritten sample to the correct digit.
 A supervised classifier should be an appropriate solution to the problem as we 
 have training data. There are also a number of academic studies that have had 
 success with SVM classifiers[2]. Before building the model, I will use 
-principal component analyis (PCA) with dimension reduction. PCA is 
+principal component analysis (PCA) with dimension reduction. PCA is 
 used to reduce the feature space of the training data to reduce the overall 
 training and testing time, as well as making it easier to graphically 
 illustrate - can produce two-dimensional plot of classifying boundaries. 
@@ -56,8 +56,8 @@ impact the accuracy of a classifier, and has even been shown to boost the
 accuracy of the SVM classfier[9]. I will evaluate the classfier using two 
 different kernels: Gaussian, or RBF kernel, and polynomial. The choice is for 
 two reasons: Firstly, Both these kernels are useful in cases such as thus where 
-the data set is not linearly separable. Secondly, I want to make a direct comparison 
-with the benchmark study, which used the Gaussian kernel.
+the data set is not linearly separable. Secondly, I want to make a direct 
+comparison with the benchmark study, which used the Gaussian kernel.
 
 The trained classifier can be evaluated using a confusion matrix, and derived 
 metrics to determine its degree of success. To evaluate the 
@@ -69,9 +69,8 @@ accuracies around 99%.
 ### Metrics
 
 The evaluation metrics for this model will be the confusion matrix, accuracy, 
-and error rate. The latter is to enable a direct comparison with the 
-benchmark, which calculates this value in the paper. We noted above that the 
-error rate can be derived from the accuracy.
+error rater, andper digit error rate. The latter two are to enable a direct 
+comparison with the benchmark, which calculates these values in the paper.
 
 I will be focussing on using the confusion matrix and accuracy to evaluate the 
 classfier for the two main reasons. Firstly, the labels in the dataset are 
@@ -121,8 +120,16 @@ derived,
 error rate = 1 - accuracy = 1 - (tp + tn) / (tp + tn + fp + fn) = (fp + fn) / (tp + tn + fp + fn)
 ```
 
-The accuracy and error rate per digit could be derived similarly, but on a 
-digit-by-digit basis.
+To determine the error rate for a given digit I refer to the benchmark 
+paper[5], which defines the error rate as the ratio of false negatives to the 
+sum of true positives and false negatives.
+
+```math
+error rate (for given digit) = fn / tp + fn
+```
+
+This can be derived from the confusion matrix: For a given row, divide the 
+off diagonal entries by the sum of all entries for that row.
 
 These metrics altogether will give us a means to determine how well the 
 classifier correctly labels the digits as well the error rate per digit. The 
@@ -199,20 +206,10 @@ the initial training data and averaging the result. This is to ensure that we
 account for bias in any one validation set. The performance metrics to be used 
 are discussed above.
 
-Preprocessing will be done using principal component analyis with dimension 
+Preprocessing will be done using PCA with dimension 
 reduction. This is discussed at greater length below.
 
 ### Benchmark
-In this section, you will need to provide a clearly defined benchmark result or 
-threshold for comparing across performances obtained by your solution. The 
-reasoning behind the benchmark (in the case where it is not an established 
-result) should be discussed. Questions to ask yourself when writing this section:
-- _Has some result or value been provided that acts as a benchmark for measuring performance?_
-
--> What metrics from benchmark? Is an accuracy given?
-"The model in this paper achieves a error of around 1.4% against the MNIST 
-testing set."
--> Also mention study that uses compression techniques
 
 This dataset is very well studied and as such, there are many comparable 
 studies to check against. For the project, I will make direct comparison to 
@@ -225,27 +222,15 @@ gamma = (1/len(features)) * 10^-3.5 (approx. 4 * 10^-7)
 ```
 
 The model in this paper achieves a error of around 1.4% against the MNIST 
-testing set. Given all these results and the availability of the identical 
-testing set, a direct comparison with this paper's results is possible.
+testing set, the paper also gives the per digit error rate. Given all these 
+results and the availability of the identical testing set, a direct comparison 
+with this paper's results is possible.
 
-This project will follow a typical machine workflow, starting from the dataset 
-acquisition, then preprocessing, model generation, and then an evaluation and 
-optimisation process.Preprocessing will be done using SciKit-Learn's `decomposition.PCA` method. 
-Following the study by Lei and Govindaraju[8] I will choose to model with 
-several different numbers of principal components between 10 and 100, as this 
-is where they found a boosted classifier performance. 
-
-Due to the previous success of such classifiers and the wealth of related 
-former studies, this project will use a SVM classifier. To both optimise and 
-evaluate the classifier a test-training split will be done on both the training 
-lables and test labels. I would like to recover some of the same results as the 
-benchmark study i.e. SVM with Guassian kernel, as well as another kernel for 
-comparison. Using the training and testing data, I will use grid search 
-cross-validation during the optimisation step. Discussed at greater length 
-above, I will derive accuracy, error rate, and confusion matrix to determine 
-the accuracy of the classifier. I will also use the error rate or false 
-negative rate to both determine the accuracy of the derived models and make 
-a direct comparison with the benchmark study. 
+However, unlike the benchmark study, I will perform preprocessing on the dataset 
+using PCA. Following the study by Lei and Govindaraju[8] I 
+will choose to model with several different numbers of principal components 
+between 10 and 100, as this is where they found a boosted classifier 
+performance. 
 
 ## III. Methodology
 _(approx. 3-5 pages)_
