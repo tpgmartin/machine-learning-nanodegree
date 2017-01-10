@@ -236,29 +236,22 @@ performance.
 _(approx. 3-5 pages)_
 
 ### Data Preprocessing
-In this section, all of your preprocessing steps will need to be clearly 
-documented, if any were necessary. From the previous section, any of the 
-abnormalities or characteristics that you identified about the dataset will be 
-addressed and corrected here. Questions to ask yourself when writing this 
-section:
-- _If the algorithms chosen require preprocessing steps like feature selection 
-or feature transformations, have they been properly documented?_
-- _Based on the **Data Exploration** section, if there were abnormalities or 
-characteristics that needed to be addressed, have they been properly corrected?_
-- _If no preprocessing is needed, has it been made clear why?_
 
-Reference
-* Solution statement
-* Project design
+The data was fetched using Scikit-Learn's `datasets.fetch_mldata`, which 
+creates a local cache for subsequent reads.
 
-Using PCA with dimension reduction for feature transformation, this is to boost 
-the runtime efficiency of the classifier.
+Data preprocessing was achieved using PCA with dimensional reduction. This was 
+to enable a speed up in the training and execution time of the classifier, 
+which has been shown to not degrade performance in general - and has even let 
+to some improvement[8]. For my implementation, I used the Python `pickle` 
+module to persist the target and and preprocessed data samples across files.
 
-Why use PCA?
-* Reduce algorithm execution time
-* Make graphical representation of analysis simpler
-* Preprocessing with PCA `decomposition.PCA`, chose several different numbers 
-of principal components between 10 and 100
+PCA was performed before the test train split to ensure consistent 
+analysis, the dimensionality of the training data should be the same as the 
+test data.
+
+See `Downloading PCA and Caching.ipynb` in the `code_samples` directory for 
+implementation details.
 
 
 ### Implementation
@@ -286,6 +279,8 @@ Details
 * Optimisation: Parameter selection via grid search cross validation 
 * Evaluation: k-fold cross validation
 * Metrics: accuracy, error, confusion matrix
+
+Cache variables in notebook: https://stackoverflow.com/questions/31255894/how-to-cache-in-ipython-notebook
 
 ### Refinement
 In this section, you will need to discuss the process of improvement you made 
