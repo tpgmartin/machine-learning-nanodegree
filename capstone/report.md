@@ -282,6 +282,8 @@ Details
 
 Cache variables in notebook: https://stackoverflow.com/questions/31255894/how-to-cache-in-ipython-notebook
 
+The SVM classifier trained 
+
 ### Refinement
 In this section, you will need to discuss the process of improvement you made 
 upon the algorithms and techniques you used in your implementation. For 
