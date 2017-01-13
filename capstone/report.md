@@ -284,23 +284,26 @@ Cache variables in notebook: https://stackoverflow.com/questions/31255894/how-to
 
 The SVM classifier trained 
 
+See `Train and Optimise Classifier.ipynb` in the `code_samples` directory for 
+implementation details.
+
 ### Refinement
-In this section, you will need to discuss the process of improvement you made 
-upon the algorithms and techniques you used in your implementation. For 
-example, adjusting parameters for certain models to acquire improved solutions 
-would fall under the refinement category. Your initial and final solutions 
-should be reported, as well as any significant intermediate results as 
-necessary. Questions to ask yourself when writing this section:
-- _Has an initial solution been found and clearly reported?_
-- _Is the process of improvement clearly documented, such as what techniques 
-were used?_
-- _Are intermediate and final solutions clearly reported as the process is 
-improved?_
 
-Check what can be taken out of Implementation section above
+The classifier refinement step is bundled as part of the classifer training 
+using grid search cross validation against the accuracy metric. Results 
+including the parameters for the best performing configuration for a given 
+number of principal components as well as the total results by parameter set 
+are available in `train.txt` in the `results` directory.
 
-Optimisation with grid search cross validation
+-> Insert intermediate results here
+-> Discuss them here
 
+Optimisation was acheived using grid search cross-validation with a 5-fold 
+cross-validation splitting strategy measured against the accuracy metric. 
+The initial parameter set used for this refinement process were derived from ...
+
+See `Train and Optimise Classifier.ipynb` in the `code_samples` directory for 
+implementation details.
 
 ## IV. Results
 _(approx. 2-3 pages)_
@@ -311,6 +314,9 @@ In this section, the final model and any supporting qualities should be evaluate
 - _Has the final model been tested with various inputs to evaluate whether the model generalizes well to unseen data?_
 - _Is the model robust enough for the problem? Do small perturbations (changes) in training data or the input space greatly affect the results?_
 - _Can results found from the model be trusted?_
+
+See `Evaluate Classifier.ipynb` in the `code_samples` directory for 
+implementation details.
 
 ### Justification
 In this section, your model’s final solution and its results should be compared to the benchmark you established earlier in the project using some type of statistical analysis. You should also justify whether these results and the solution are significant enough to have solved the problem posed in the project. Questions to ask yourself when writing this section:
