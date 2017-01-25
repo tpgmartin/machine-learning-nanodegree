@@ -117,7 +117,9 @@ From this, the error rate or rate at which the classifier misclassifies can be
 derived,
 
 ```math
-error rate = 1 - accuracy = 1 - (tp + tn) / (tp + tn + fp + fn) = (fp + fn) / (tp + tn + fp + fn)
+error rate = 1 - accuracy 
+           = 1 - (tp + tn) / (tp + tn + fp + fn) 
+          = (fp + fn) / (tp + tn + fp + fn)
 ```
 
 To determine the error rate for a given digit I refer to the benchmark 
@@ -199,6 +201,8 @@ is a simple and effective means of optimising the classifier, as a way of
 justifying our initial assumptions. Other parameters not specified here will be 
 used at their default values.
 
+-> talk about KNN
+
 The classifier will be evaluated using the process of k-fold cross validation 
 to achieve a representative performance score of the model. This is a process 
 of systematically cycling through different training and validation subsets of 
@@ -226,6 +230,8 @@ testing set, the paper also gives the per digit error rate. Given all these
 results and the availability of the identical testing set, a direct comparison 
 with this paper's results is possible.
 
+-> talk about KNN
+
 However, unlike the benchmark study, I will perform preprocessing on the dataset 
 using PCA. Following the study by Lei and Govindaraju[8] I 
 will choose to model with several different numbers of principal components 
@@ -243,7 +249,32 @@ creates a local cache for subsequent reads.
 Data preprocessing was achieved using PCA with dimensional reduction. This was 
 to enable a speed up in the training and execution time of the classifier, 
 which has been shown to not degrade performance in general - and has even let 
-to some improvement[8]. For my implementation, I used the Python `pickle` 
+to some improvement[8]. This is also a very necessary step when processing such 
+a large and feature reach dataset such as MNIST especially when training on 
+general purpose hardware. 
+
+-> Show variance across components
+
+```code
+pca = PCA().fit(X)
+print '--------------------------------------'
+print pca.explained_variance_
+print '--------------------------------------'
+
+plt.plot(pca.explained_variance_)
+plt.yscale('log')
+plt.show()
+
+# Compute the area using the composite trapezoidal rule.
+area = trapz(y, dx=5)
+print("area =", area)
+
+# Compute the area using the composite Simpson's rule.
+area = simps(y, dx=5)
+print("area =", area)
+```
+
+For my implementation, I used the Python `pickle` 
 module to persist the target and and preprocessed data samples across files.
 
 PCA was performed before the test train split to ensure consistent 
