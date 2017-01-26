@@ -419,20 +419,18 @@ It is not clear how this relates to PCA and KNN.
 
 
 ## V. Conclusion
-_(approx. 1-2 pages)_
 
 ### Free-Form Visualization
-In this section, you will need to provide some form of visualization that 
-emphasizes an important quality about the project. It is much more free-form, 
-but should reasonably support a significant result or characteristic about the 
-problem that you want to discuss. Questions to ask yourself when writing this 
-section:
-- _Have you visualized a relevant or important quality about the problem, 
-dataset, input data, or results?_
-- _Is the visualization thoroughly analyzed and discussed?_
-- _If a plot is provided, are the axes, title, and datum clearly defined?_
+
+The results for this project can be powerfully illustrated using a confusion 
+matrix shown below. This is from the results of the optimised classifier 
+detailed in the section "Justification" above.
 
 ![Predicted vs True label](./images/confusion_matrix.png "Predicted vs True label")
+
+This demonstrates a very powerful performance overall from the classifier, as 
+well as highlighting the digits that proved more difficult relative to others. 
+This is discussed in more detail above.
 
 ### Reflection
 In this section, you will summarize the entire end-to-end problem solution and 
@@ -457,24 +455,8 @@ how to implement, but would consider using if you knew how?_
 - _If you used your final solution as the new benchmark, do you think an even 
 better solution exists?_
 
------------
-
-**Before submitting, ask yourself. . .**
-
-- Does the project report you’ve written follow a well-organized structure 
-similar to that of the project template?
-- Is each section (particularly **Analysis** and **Methodology**) written in a 
-clear, concise and specific fashion? Are there any ambiguous terms or phrases 
-that need clarification?
-- Would the intended audience of your project be able to understand your 
-analysis, methods, and results?
-- Have you properly proof-read your project report to assure there are minimal 
-grammatical and spelling mistakes?
-- Are all the resources used for this project correctly cited and referenced?
-- Is the code that implements your solution easily readable and properly 
-commented?
-- Does the code execute without error and produce results similar to those 
-reported?
+Bottlneck for the project was the overall size of the database, which for the 
+SVM classfier used as part of Sci-Kit Learn 
 
 ### References
 
