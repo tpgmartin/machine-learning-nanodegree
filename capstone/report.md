@@ -346,27 +346,98 @@ In this section, the final model and any supporting qualities should be evaluate
 - _Is the model robust enough for the problem? Do small perturbations (changes) in training data or the input space greatly affect the results?_
 - _Can results found from the model be trusted?_
 
+| k | PC | Parameter Set | Test Set Accuracy |
+| - | -- | ------------- | ----------------- |
+| 2 | 50 | 1             | 0.976533006836    |
+| 3 | 50 | 2             | 0.979185797368    |
+| 4 | 50 | 2             | 0.980206101418    |
+| 5 | 50 | 2             | 0.980716253444    |
+
+| k | PC  | Parameter Set | Test Set Accuracy |
+| - | --- | ------------- | ----------------- |
+| 5 | 25  | 2             | 0.979491888583    |
+| 5 | 50  | 2             | 0.980716253444    |
+| 5 | 100 | 2             | 0.978879706152    |
+
+Parameter sets
+
+| 3 | [(1, 3, 0.001, 'poly'), (1, 3, 0.001, 'rbf'), (1, 3, 0.0001, 'rbf'), (1, 4, 0.0001, 'rbf'), (1, 5, 0.0001, 'rbf'), (1, 6, 0.0001, 'rbf'), (10, 3, 0.0001, 'rbf'), (10, 4, 0.0001, 'rbf'), (10, 5, 0.0001, 'rbf'), (10, 6, 0.0001, 'rbf'), (100, 3, 0.0001, 'rbf'), (100, 4, 0.0001, 'rbf'), (100, 5, 0.0001, 'rbf'), (100, 6, 0.0001, 'rbf'), (1000, 3, 0.0001, 'rbf'), (1000, 4, 0.0001, 'rbf'), (1000, 5, 0.0001, 'rbf'), (1000, 6, 0.0001, 'rbf')] |
+| 2 | [(1, 3, 0.001, 'poly'), (1, 3, 0.0001, 'poly'), (10, 3, 0.001, 'poly'), (10, 3, 0.0001, 'poly'), (100, 3, 0.001, 'poly'), (100, 3, 0.0001, 'poly'), (1000, 3, 0.001, 'poly'), (1000, 3, 0.0001, 'poly')] |
+| 1 | [(1, 3, 0.001, 'poly'), (1, 3, 0.0001, 'poly'), (1, 3, 0.0001, 'rbf'), (1, 4, 0.0001, 'rbf'), (1, 5, 0.0001, 'rbf'), (1, 6, 0.0001, 'rbf'), (10, 3, 0.0001, 'rbf'), (10, 4, 0.0001, 'rbf'), (10, 5, 0.0001, 'rbf'), (10, 6, 0.0001, 'rbf'), (100, 3, 0.0001, 'rbf'), (100, 4, 0.0001, 'rbf'), (100, 5, 0.0001, 'rbf'), (100, 6, 0.0001, 'rbf'), (1000, 3, 0.0001, 'rbf'), (1000, 4, 0.0001, 'rbf'), (1000, 5, 0.0001, 'rbf'), (1000, 6, 0.0001, 'rbf')] |
+
 See `Evaluate Classifier.ipynb` in the `code_samples` directory for 
 implementation details.
 
 ### Justification
-In this section, your model’s final solution and its results should be compared to the benchmark you established earlier in the project using some type of statistical analysis. You should also justify whether these results and the solution are significant enough to have solved the problem posed in the project. Questions to ask yourself when writing this section:
-- _Are the final results found stronger than the benchmark result reported earlier?_
+In this section, your model’s final solution and its results should be compared 
+to the benchmark you established earlier in the project using some type of 
+statistical analysis. You should also justify whether these results and the 
+solution are significant enough to have solved the problem posed in the 
+project. Questions to ask yourself when writing this section:
+- _Are the final results found stronger than the benchmark result reported 
+earlier?_
 - _Have you thoroughly analyzed and discussed the final solution?_
 - _Is the final solution significant enough to have solved the problem?_
+
+The final classifier used an arbitrary selection of parameters from paramter 
+set one.
+
+The benchmark reported above produced a SVM classifier with an error of 1.4%. 
+This compares favourably with the classfier trained in this project with has an 
+error of 1.93% (corresponding to an accuracy of 98.07%). Discrepancies 
+between the benchmark results may be due to,
+
+* Preprocessing with PCA on the intial dataset, the benchmark study did not use 
+any preprocessing
+* Combination of KNN and SVM classifiers, the benchmark study trained the SVM 
+directly on the MNIST set
+* Different parameters used in final classifier, related to previous two points
+
+More detailed comparision with the benchmark follows by comparing the error 
+per digit. This gives some indication of how the two classifiers differ and 
+highlight the effect of preprocessing. Accounting for the overall larger error 
+for the classifier trained in this project in relative terms, the error per 
+digit was fairly similar dispite the preprocessing. In both cases the digits 1, 
+0, 6 has the lowers error rates, and digit 9 had siginficantly greater error 
+rates. Interesting differences between the classifiers are highlighted by 
+looking at the error rate for digit 3, which had the 4th lowest error rate in 
+the benchmark, but had the second worst error rate in my trained classifier. 
+It is not clear how this relates to PCA and KNN.
+
+| Digit | Benchmark Error | Error per Digit | 
+| ----- | --------------- | --------------- | 
+| 0	    | 0.0061	        | 0.0076	        | 
+| 1	    | 0.0052	        | 0.0062	        | 
+| 2	    | 0.0164          | 0.0135	        | 
+| 3	    | 0.0148	        | 0.0313	        | 
+| 4	    | 0.0132	        | 0.0236	        | 
+| 5	    | 0.0168	        | 0.0288	        | 
+| 6	    | 0.0104	        | 0.0101	        | 
+| 7	    | 0.0184	        | 0.0198	        | 
+| 8	    | 0.0184	        | 0.0219	        | 
+| 9	    | 0.0277	        | 0.0319	        | 
 
 
 ## V. Conclusion
 _(approx. 1-2 pages)_
 
 ### Free-Form Visualization
-In this section, you will need to provide some form of visualization that emphasizes an important quality about the project. It is much more free-form, but should reasonably support a significant result or characteristic about the problem that you want to discuss. Questions to ask yourself when writing this section:
-- _Have you visualized a relevant or important quality about the problem, dataset, input data, or results?_
+In this section, you will need to provide some form of visualization that 
+emphasizes an important quality about the project. It is much more free-form, 
+but should reasonably support a significant result or characteristic about the 
+problem that you want to discuss. Questions to ask yourself when writing this 
+section:
+- _Have you visualized a relevant or important quality about the problem, 
+dataset, input data, or results?_
 - _Is the visualization thoroughly analyzed and discussed?_
 - _If a plot is provided, are the axes, title, and datum clearly defined?_
 
+![Predicted vs True label](./images/confusion_matrix.png "Predicted vs True label")
+
 ### Reflection
-In this section, you will summarize the entire end-to-end problem solution and discuss one or two particular aspects of the project you found interesting or difficult. You are expected to reflect on the project as a whole to show that you have a firm understanding of the entire process employed in your work. Questions to ask yourself when writing this section:
+In this section, you will summarize the entire end-to-end problem solution and 
+discuss one or two particular aspects of the project you found interesting or 
+difficult. You are expected to reflect on the project as a whole to show that you have a firm understanding of the entire process employed in your work. Questions to ask yourself when writing this section:
 - _Have you thoroughly summarized the entire process you used for this project?_
 - _Were there any interesting aspects of the project?_
 - _Were there any difficult aspects of the project?_
