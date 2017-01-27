@@ -433,30 +433,41 @@ well as highlighting the digits that proved more difficult relative to others.
 This is discussed in more detail above.
 
 ### Reflection
-In this section, you will summarize the entire end-to-end problem solution and 
-discuss one or two particular aspects of the project you found interesting or 
-difficult. You are expected to reflect on the project as a whole to show that you have a firm understanding of the entire process employed in your work. Questions to ask yourself when writing this section:
-- _Have you thoroughly summarized the entire process you used for this project?_
-- _Were there any interesting aspects of the project?_
-- _Were there any difficult aspects of the project?_
-- _Does the final model and solution fit your expectations for the problem, and should it be used in a general setting to solve these types of problems?_
+
+The workflow for this project was as follows,
+
+1. Research of problem area and relevant benchmark in the literature
+2. Finding and downloading relevant dataset
+3. Preprocessed dataset using PCA
+4. Initial classification of dataset using KNN
+5. Trained SVM using range of paramters - only used samples not correctly labelled by KNN
+6. Produced more results for most successful KNN-SVM classifier
+
+The most difficult stages in the project were also happily the most 
+interesting, those being steps 4 and 5. I was not clear in my previous 
+research and project proposal how to efficiently run the SVM classifier against 
+such a large dataset. This proved to be a real bottleneck for the project and 
+required further investigation to proceed. However the hybrid approach used 
+was both very effective and also a first for me.
+
+The final model is robust, effective and efficient. In this project I have been 
+able to derive a classifier with over 98% accuracy, highly competitive with 
+the benchmark study, in a total running time of only 48.6s (on my laptop). 
+This is extremely promising moving into a more general setting.
 
 ### Improvement
-In this section, you will need to provide discussion as to how one aspect of 
-the implementation you designed could be improved. As an example, consider ways 
-your implementation can be made more general, and what would need to be 
-modified. You do not need to make this improvement, but the potential solutions 
-resulting from these changes are considered and compared/contrasted to your 
-current solution. Questions to ask yourself when writing this section:
-- _Are there further improvements that could be made on the algorithms or 
-techniques you used in this project?_
-- _Were there algorithms or techniques you researched that you did not know 
-how to implement, but would consider using if you knew how?_
-- _If you used your final solution as the new benchmark, do you think an even 
-better solution exists?_
 
-Bottlneck for the project was the overall size of the database, which for the 
-SVM classfier used as part of Sci-Kit Learn 
+The major bottleneck for this project was the implementation of the SVM 
+classifier used by Scikit-Learn. This SVM does not scale well for larger 
+datasets, with a reported order of growth between the square of the number of 
+samples and the cube the number of samples[10]. A number of solutions to 
+explore include trying to better utilise caching of calculated distances in 
+memory, trying alternatives to Scikit-Learn like Vowpal Wabbit, or make better 
+use of dedicated hardware, such as running the SVM on the GPU rather than a 
+general purpose CPU. If a significant performance improvement can be made for 
+the SVM classifier then I believe a future classifier could outperform the 
+model created in this project. This is because a more opitimised classifer 
+would be less reliant on preprocessing or hybrid approaches.
 
 ### References
 
@@ -481,3 +492,5 @@ _Feature_Selection_for_Data_Mining/links/53e413d70cf25d674e94b475.pdf#p
 age=78  "Speeding Up Multi-class SVM Evaluation by PCA and Feature Selection"
 
 [9] http://yann.lecun.com/exdb/mnist/ "The MNIST Database of Handwritten Digits"
+
+[10] http://scikit-learn.org/stable/modules/svm.html#complexity "Support Vector Machines - Complexity"
