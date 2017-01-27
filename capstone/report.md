@@ -369,15 +369,6 @@ See `Evaluate Classifier.ipynb` in the `code_samples` directory for
 implementation details.
 
 ### Justification
-In this section, your model’s final solution and its results should be compared 
-to the benchmark you established earlier in the project using some type of 
-statistical analysis. You should also justify whether these results and the 
-solution are significant enough to have solved the problem posed in the 
-project. Questions to ask yourself when writing this section:
-- _Are the final results found stronger than the benchmark result reported 
-earlier?_
-- _Have you thoroughly analyzed and discussed the final solution?_
-- _Is the final solution significant enough to have solved the problem?_
 
 The final classifier used an arbitrary selection of parameters from paramter 
 set one.
@@ -391,7 +382,8 @@ between the benchmark results may be due to,
 any preprocessing
 * Combination of KNN and SVM classifiers, the benchmark study trained the SVM 
 directly on the MNIST set
-* Different parameters used in final classifier, related to previous two points
+* Different parameters used in final classifier, potentially related to 
+previous two points
 
 More detailed comparision with the benchmark follows by comparing the error 
 per digit. This gives some indication of how the two classifiers differ and 
