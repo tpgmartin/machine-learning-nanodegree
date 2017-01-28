@@ -310,6 +310,10 @@ Details
 * Evaluation: k-fold cross validation
 * Metrics: accuracy, error, confusion matrix
 
+KNN
+
+* Use odd number of neighbours
+
 Cache variables in notebook: https://stackoverflow.com/questions/31255894/how-to-cache-in-ipython-notebook
 
 The SVM classifier trained 
@@ -328,6 +332,42 @@ are available in `train.txt` in the `results` directory.
 -> Insert intermediate results here
 -> Discuss them here
 
+| k   | PC  | Parameter Set | Test Set Accuracy |
+| --- | --- | ------------- | ----------------- |
+| 50  | 100 | 1             | 0.9843            |
+| 100 | 100 | 1             | 0.9858            |
+| 200 | 100 | 1             | 0.9858            |
+
+| k   | PC  | Parameter Set | Test Set Accuracy |
+| --- | --- | ------------- | ----------------- |
+| 100 | 25  | 2             | 0.9822            |
+| 100 | 50  | 1             | 0.9849            |
+| 100 | 100 | 1             | 0.9858            |
+
+Parameter sets
+
+Parameter set 1, all eight combinations of the following,
+
+* `C` = { 1, 10, 100, 1000 }
+* `degree` = 2
+* `gamma` = ( 10^-3, 10^-4 }
+* `kernel` = polynomial
+
+Parameter set 2, either the two combinations of,
+
+* `C` = 1
+* `degree` = 2
+* `gamma` = ( 10^-3, 10^-4 }
+* `kernel` = polynomial
+
+or the eight combinations of,
+
+* `C` = { 1, 10, 100, 1000 }
+* `degree` = 3
+* `gamma` = ( 10^-3, 10^-4 }
+* `kernel` = polynomial
+
+
 Optimisation was acheived using grid search cross-validation with a 5-fold 
 cross-validation splitting strategy measured against the accuracy metric. 
 The initial parameter set used for this refinement process were derived from ...
@@ -336,7 +376,6 @@ See `Train and Optimise Classifier.ipynb` in the `code_samples` directory for
 implementation details.
 
 ## IV. Results
-_(approx. 2-3 pages)_
 
 ### Model Evaluation and Validation
 In this section, the final model and any supporting qualities should be 
@@ -354,27 +393,8 @@ model generalizes well to unseen data?_
 in training data or the input space greatly affect the results?_
 - _Can results found from the model be trusted?_
 
-| k | PC | Parameter Set | Test Set Accuracy |
-| - | -- | ------------- | ----------------- |
-| 2 | 50 | 1             | 0.976533006836    |
-| 3 | 50 | 2             | 0.979185797368    |
-| 4 | 50 | 2             | 0.980206101418    |
-| 5 | 50 | 2             | 0.980716253444    |
-
-| k | PC  | Parameter Set | Test Set Accuracy |
-| - | --- | ------------- | ----------------- |
-| 5 | 25  | 2             | 0.979491888583    |
-| 5 | 50  | 2             | 0.980716253444    |
-| 5 | 100 | 2             | 0.978879706152    |
-
-Parameter sets
-
-| 3 | [(1, 3, 0.001, 'poly'), (1, 3, 0.001, 'rbf'), (1, 3, 0.0001, 'rbf'), (1, 4, 0.0001, 'rbf'), (1, 5, 0.0001, 'rbf'), (1, 6, 0.0001, 'rbf'), (10, 3, 0.0001, 'rbf'), (10, 4, 0.0001, 'rbf'), (10, 5, 0.0001, 'rbf'), (10, 6, 0.0001, 'rbf'), (100, 3, 0.0001, 'rbf'), (100, 4, 0.0001, 'rbf'), (100, 5, 0.0001, 'rbf'), (100, 6, 0.0001, 'rbf'), (1000, 3, 0.0001, 'rbf'), (1000, 4, 0.0001, 'rbf'), (1000, 5, 0.0001, 'rbf'), (1000, 6, 0.0001, 'rbf')] |
-| 2 | [(1, 3, 0.001, 'poly'), (1, 3, 0.0001, 'poly'), (10, 3, 0.001, 'poly'), (10, 3, 0.0001, 'poly'), (100, 3, 0.001, 'poly'), (100, 3, 0.0001, 'poly'), (1000, 3, 0.001, 'poly'), (1000, 3, 0.0001, 'poly')] |
-| 1 | [(1, 3, 0.001, 'poly'), (1, 3, 0.0001, 'poly'), (1, 3, 0.0001, 'rbf'), (1, 4, 0.0001, 'rbf'), (1, 5, 0.0001, 'rbf'), (1, 6, 0.0001, 'rbf'), (10, 3, 0.0001, 'rbf'), (10, 4, 0.0001, 'rbf'), (10, 5, 0.0001, 'rbf'), (10, 6, 0.0001, 'rbf'), (100, 3, 0.0001, 'rbf'), (100, 4, 0.0001, 'rbf'), (100, 5, 0.0001, 'rbf'), (100, 6, 0.0001, 'rbf'), (1000, 3, 0.0001, 'rbf'), (1000, 4, 0.0001, 'rbf'), (1000, 5, 0.0001, 'rbf'), (1000, 6, 0.0001, 'rbf')] |
-
-See `Evaluate Classifier.ipynb` in the `code_samples` directory for 
-implementation details.
+See `Train and Optimise Classifier.ipynb` and `Evaluate Classifier.ipynb` in 
+the `code_samples` directory for implementation details.
 
 ### Justification
 
@@ -383,7 +403,7 @@ set one.
 
 The benchmark reported above produced a SVM classifier with an error of 1.4%. 
 This compares favourably with the classfier trained in this project with has an 
-error of 1.93% (corresponding to an accuracy of 98.07%). Discrepancies 
+error of 1.42% (corresponding to an accuracy of 98.58%). Discrepancies 
 between the benchmark results may be due to,
 
 * Preprocessing with PCA on the intial dataset, the benchmark study did not use 
@@ -400,22 +420,22 @@ for the classifier trained in this project in relative terms, the error per
 digit was fairly similar dispite the preprocessing. In both cases the digits 1, 
 0, 6 has the lowers error rates, and digit 9 had siginficantly greater error 
 rates. Interesting differences between the classifiers are highlighted by 
-looking at the error rate for digit 3, which had the 4th lowest error rate in 
-the benchmark, but had the second worst error rate in my trained classifier. 
+looking at the error rate for digit 4, which had the 4th lowest error rate in 
+the benchmark, but had the 3rd worst error rate in my trained classifier. 
 It is not clear how this relates to PCA and KNN.
 
 | Digit | Benchmark Error | Error per Digit | 
 | ----- | --------------- | --------------- | 
-| 0	    | 0.0061	        | 0.0076	        | 
-| 1	    | 0.0052	        | 0.0062	        | 
-| 2	    | 0.0164          | 0.0135	        | 
-| 3	    | 0.0148	        | 0.0313	        | 
-| 4	    | 0.0132	        | 0.0236	        | 
-| 5	    | 0.0168	        | 0.0288	        | 
+| 0	    | 0.0061	        | 0.0022	        | 
+| 1	    | 0.0052	        | 0.0053	        | 
+| 2	    | 0.0164          | 0.0104	        | 
+| 3	    | 0.0148	        | 0.0176	        | 
+| 4	    | 0.0132	        | 0.0214	        | 
+| 5	    | 0.0168	        | 0.0232	        | 
 | 6	    | 0.0104	        | 0.0101	        | 
-| 7	    | 0.0184	        | 0.0198	        | 
-| 8	    | 0.0184	        | 0.0219	        | 
-| 9	    | 0.0277	        | 0.0319	        | 
+| 7	    | 0.0184	        | 0.0139	        | 
+| 8	    | 0.0184	        | 0.0136	        | 
+| 9	    | 0.0277	        | 0.0257	        | 
 
 
 ## V. Conclusion
@@ -452,7 +472,7 @@ was both very effective and also a first for me.
 
 The final model is robust, effective and efficient. In this project I have been 
 able to derive a classifier with over 98% accuracy, highly competitive with 
-the benchmark study, in a total running time of only 48.6s (on my laptop). 
+the benchmark study, in a total running time of under 160s (on my laptop). 
 This is extremely promising moving into a more general setting.
 
 ### Improvement
