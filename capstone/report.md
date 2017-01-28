@@ -57,7 +57,7 @@ accuracy of the SVM classfier[9]. I will evaluate the classfier using two
 different kernels: Gaussian, or RBF kernel, and polynomial. The choice is for 
 two reasons: Firstly, Both these kernels are useful in cases such as thus where 
 the data set is not linearly separable. Secondly, I want to make a direct 
-comparison with the benchmark study, which used the Gaussian kernel.
+comparison with the benchmark study, which used the Gaussian kernel. 
 
 The trained classifier can be evaluated using a confusion matrix, and derived 
 metrics to determine its degree of success. To evaluate the 
@@ -119,7 +119,7 @@ derived,
 ```math
 error rate = 1 - accuracy 
            = 1 - (tp + tn) / (tp + tn + fp + fn) 
-          = (fp + fn) / (tp + tn + fp + fn)
+           = (fp + fn) / (tp + tn + fp + fn)
 ```
 
 To determine the error rate for a given digit I refer to the benchmark 
@@ -191,24 +191,35 @@ feature space.
 
 The SVM provided by Scikit-Learn's `svm.SVC` module supports the following 
 parameters relevant for this investigation,
+
 * C - penalty parameter, how closely hyperplane follows the datapoints
 * kernel - the kernel choice, either RBF or polynomial
 * degree - the degree of the polynomial kernel
 * gamma - kernel coefficient, defines radius of influence for a given datapoint
+
 The specific parameter values will be decided using grid search cross validation 
 starting from a set of values following the relevant literature. This technique 
 is a simple and effective means of optimising the classifier, as a way of 
 justifying our initial assumptions. Other parameters not specified here will be 
 used at their default values.
 
--> talk about KNN
+Due to the size of the dataset used in this project it is necessary to use a 
+hybrid approach[10]. This means initially running the dataset through a k 
+nearest neighbours classifier (KNN) and only run the incorrectly labelled 
+digits through the SVM classifier. Together this known as KNN-SVM, and has the 
+dual advantage of achieving a high level of accuracy on a feature rich dataset 
+using SVM, whilst offloading a large proportion of the classification problem 
+to a much cheaper KNN classifier.
 
-The classifier will be evaluated using the process of k-fold cross validation 
-to achieve a representative performance score of the model. This is a process 
-of systematically cycling through different training and validation subsets of 
-the initial training data and averaging the result. This is to ensure that we 
-account for bias in any one validation set. The performance metrics to be used 
-are discussed above.
+The classifier will be trained using a validation set by performing a test 
+train split. I will vary the following parameters,
+
+* PCA: `n_components`
+* KNN: `n_neighbors`
+* SVM: `C`, `degree`, `gamma`, `kernel`
+
+Each trained classifier will be used to evaluate the test set. The performance 
+metrics to be used are discussed above.
 
 Preprocessing will be done using PCA with dimension 
 reduction. This is discussed at greater length below.
@@ -230,16 +241,14 @@ testing set, the paper also gives the per digit error rate. Given all these
 results and the availability of the identical testing set, a direct comparison 
 with this paper's results is possible.
 
--> talk about KNN
-
 However, unlike the benchmark study, I will perform preprocessing on the dataset 
 using PCA. Following the study by Lei and Govindaraju[8] I 
 will choose to model with several different numbers of principal components 
-between 10 and 100, as this is where they found a boosted classifier 
-performance. 
+between 25 and 100, as this is where they found a boosted classifier 
+performance. I will also use a hybrid approach, using a combination of KNN and 
+SVM classifiers, due to the size of the dataset as discussed above.
 
 ## III. Methodology
-_(approx. 3-5 pages)_
 
 ### Data Preprocessing
 
@@ -251,27 +260,17 @@ to enable a speed up in the training and execution time of the classifier,
 which has been shown to not degrade performance in general - and has even let 
 to some improvement[8]. This is also a very necessary step when processing such 
 a large and feature reach dataset such as MNIST especially when training on 
-general purpose hardware. 
-
--> Show variance across components
+general purpose hardware. The number of components to use in this step comes 
+follows from two considerations. Firstly, a previous study using PCA on the 
+MNIST dataset showed boosted SVM performance for a number of principal 
+components below 100[8]. Secondly, by looking at the explained variance ratio, 
+we see that over 91% of the variance is accounted for by the top 100 
+components.
 
 ```code
-pca = PCA().fit(X)
-print '--------------------------------------'
-print pca.explained_variance_
-print '--------------------------------------'
-
-plt.plot(pca.explained_variance_)
-plt.yscale('log')
-plt.show()
-
-# Compute the area using the composite trapezoidal rule.
-area = trapz(y, dx=5)
-print("area =", area)
-
-# Compute the area using the composite Simpson's rule.
-area = simps(y, dx=5)
-print("area =", area)
+pca = PCA().fit(X) # where X is the imported training set
+explained_variance = pca.explained_variance_ratio_
+sum(explained_variance[101]) # => 91.6%
 ```
 
 For my implementation, I used the Python `pickle` 
@@ -320,7 +319,7 @@ implementation details.
 
 ### Refinement
 
-The classifier refinement step is bundled as part of the classifer training 
+The classifier refinement step is bundled as part of the classifier training 
 using grid search cross validation against the accuracy metric. Results 
 including the parameters for the best performing configuration for a given 
 number of principal components as well as the total results by parameter set 
@@ -340,10 +339,19 @@ implementation details.
 _(approx. 2-3 pages)_
 
 ### Model Evaluation and Validation
-In this section, the final model and any supporting qualities should be evaluated in detail. It should be clear how the final model was derived and why this model was chosen. In addition, some type of analysis should be used to validate the robustness of this model and its solution, such as manipulating the input data or environment to see how the model’s solution is affected (this is called sensitivity analysis). Questions to ask yourself when writing this section:
-- _Is the final model reasonable and aligning with solution expectations? Are the final parameters of the model appropriate?_
-- _Has the final model been tested with various inputs to evaluate whether the model generalizes well to unseen data?_
-- _Is the model robust enough for the problem? Do small perturbations (changes) in training data or the input space greatly affect the results?_
+In this section, the final model and any supporting qualities should be 
+evaluated in detail. It should be clear how the final model was derived and why 
+this model was chosen. In addition, some type of analysis should be used to 
+validate the robustness of this model and its solution, such as manipulating 
+the input data or environment to see how the model’s solution is affected (this 
+is called sensitivity analysis). Questions to ask yourself when writing this 
+section:
+- _Is the final model reasonable and aligning with solution expectations? Are 
+the final parameters of the model appropriate?_
+- _Has the final model been tested with various inputs to evaluate whether the 
+model generalizes well to unseen data?_
+- _Is the model robust enough for the problem? Do small perturbations (changes) 
+in training data or the input space greatly affect the results?_
 - _Can results found from the model be trusted?_
 
 | k | PC | Parameter Set | Test Set Accuracy |
@@ -452,13 +460,13 @@ This is extremely promising moving into a more general setting.
 The major bottleneck for this project was the implementation of the SVM 
 classifier used by Scikit-Learn. This SVM does not scale well for larger 
 datasets, with a reported order of growth between the square of the number of 
-samples and the cube the number of samples[10]. A number of solutions to 
+samples and the cube the number of samples[11]. A number of solutions to 
 explore include trying to better utilise caching of calculated distances in 
 memory, trying alternatives to Scikit-Learn like Vowpal Wabbit, or make better 
 use of dedicated hardware, such as running the SVM on the GPU rather than a 
 general purpose CPU. If a significant performance improvement can be made for 
 the SVM classifier then I believe a future classifier could outperform the 
-model created in this project. This is because a more opitimised classifer 
+model created in this project. This is because a more opitimised classifier 
 would be less reliant on preprocessing or hybrid approaches.
 
 ### References
@@ -472,7 +480,7 @@ A1D8E2811526BD0E596?doi=10.1.1.106.3963&rep=rep1&type=pdf "Deformation Models fo
 
 [4] https://www.microsoft.com/en-us/research/publication/best-practices-for-convolutional-neural-networks-applied-to-visual-document-analysis/ "Best Practices for Convolutional Neural Networks Applied to Visual Document Analysis"
 
-[5] https://cseweb.ucsd.edu/~jmcauley/cse190/reports/fa15/025.pdf "Reproducing Results of Guassian Kernel SVM classifers on the MNIST Dataset"
+[5] https://cseweb.ucsd.edu/~jmcauley/cse190/reports/fa15/025.pdf "Reproducing Results of Guassian Kernel SVM classifiers on the MNIST Dataset"
 
 [6] http://softclassval.r-forge.r-project.org/2013/2013-01-03-ChemomIntellLabSys
 tTheorypaper.html "Validation of Soft Classification Models using Partial Class Memberships: An Extended Concept of Sensitivity & Co. applied to Grading of Astrocytoma Tissues"
@@ -485,4 +493,6 @@ age=78  "Speeding Up Multi-class SVM Evaluation by PCA and Feature Selection"
 
 [9] http://yann.lecun.com/exdb/mnist/ "The MNIST Database of Handwritten Digits"
 
-[10] http://scikit-learn.org/stable/modules/svm.html#complexity "Support Vector Machines - Complexity"
+[10] https://www.vision.caltech.edu/Image_Datasets/Caltech101/nhz_cvpr06.pdf SVM-KNN: Discriminative Nearest Neighbor Classification for Visual Category Recognition
+
+[11] http://scikit-learn.org/stable/modules/svm.html#complexity "Support Vector Machines - Complexity"
