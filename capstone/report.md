@@ -1,7 +1,7 @@
 # Machine Learning Engineer Nanodegree
 ## Capstone Project
 Tom Martin
-3rd January 2017
+29th January 2017
 
 ## I. Definition
 
@@ -33,7 +33,7 @@ The capstone will attempt to train and tune a SVM classifier that is able to
 correctly determine the number intended from the supplied image of a 
 handwritten sample. The model produced will be trained, tested and validated 
 against the supplied dataset.  The success of the classifier will be measured 
-using the Scikit-Learn metric's module `metrics.accuracy_score`,
+using the SciKit-Learn metric's module `metrics.accuracy_score`,
 `metrics.confusion_matrix`. From these metrics we can derive both the error 
 rate and per digit error rate in order to enable a direct comparsion with 
 the benchmark model below. It should be mentioned that some of these metrics 
@@ -189,7 +189,7 @@ is particularly powerful when dealing with nonlinear data by employing the
 so-called kernel trick: mapping the input data points to a higher dimensional 
 feature space.
 
-The SVM provided by Scikit-Learn's `svm.SVC` module supports the following 
+The SVM provided by SciKit-Learn's `svm.SVC` module supports the following 
 parameters relevant for this investigation,
 
 * C - penalty parameter, how closely hyperplane follows the datapoints
@@ -252,7 +252,7 @@ SVM classifiers, due to the size of the dataset as discussed above.
 
 ### Data Preprocessing
 
-The data was fetched using Scikit-Learn's `datasets.fetch_mldata`, which 
+The data was fetched using SciKit-Learn's `datasets.fetch_mldata`, which 
 creates a local cache for subsequent reads.
 
 Data preprocessing was achieved using PCA with dimensional reduction. This was 
@@ -285,58 +285,60 @@ implementation details.
 
 
 ### Implementation
-In this section, the process for which metrics, algorithms, and techniques 
-that you implemented for the given data will need to be clearly documented. It 
-should be abundantly clear how the implementation was carried out, and 
-discussion should be made regarding any complications that occurred during 
-this process. Questions to ask yourself when writing this section:
-- _Is it made clear how the algorithms and techniques were implemented with the 
-given datasets or input data?_
-- _Were there any complications with the original metrics or techniques that 
-required changing prior to acquiring a solution?_
-- _Was there any part of the coding process (e.g., writing complicated 
-functions) that should be documented?_
 
-Reference
-* Solution statement
-* Evaluation metrics
-* Project design
+The full implementation for this project is illustrated in the figure below. 
+As a whole, the project follows the approach given by Zhang et al.[10] known 
+as SVM-KNN. I was not aware of the need to use a hybrid approach when I 
+initially planned this project but this SVM Implementation does not scale well 
+for larger datasets, with a reported order of growth between the square of the 
+number of samples and the cube the number of samples[11].
 
-Details
+![Project Implementation](./images/project_implementation.png "Project Implementation")
 
-* Using SVM classifier
-* Using RBF and polynomial kernels for comparison
-* Optimisation: Parameter selection via grid search cross validation 
-* Evaluation: k-fold cross validation
-* Metrics: accuracy, error, confusion matrix
+Going from top to bottom through the above figure. Given the initial dataset, 
+I performed PCA with dimensional reduction for three different numbers of 
+principal components and serialised the result with the `pickle` module. A 
+test/train split was then performed before moving on to training, in order to 
+have a validation set to train against. For a given preprocessed dataset, I ran 
+this though the KNN classifier to perform an initial classification. A 
+subsequent call to the SVM classifier was only made if the given k neighbours 
+do not have the same label i.e. a further classification is required. It is at 
+this point that the the distance matrix is converted to a kernel matrix for SVM 
+classifier. 
 
-KNN
+All the algorithms and modules used in the project implementation come from 
+SciKit-Lean 0.18.1 libary. Those being `decomposition.PCA`, 
+`neighbors.KNeighborsClassifier`, and `svm.SVC` for classifaction, 
+`model_selection.train_test_split` to perform the test/train split, and 
+`metrics.accuracy_score`, `metrics.confusion_matrix` to derive evaluation 
+metrics.
 
-* Use odd number of neighbours
+The training and evaluation step was done over a set of variables for both the 
+KNN and SVM classifiers to perform a basic hyperparameter optimisation.
 
-Cache variables in notebook: https://stackoverflow.com/questions/31255894/how-to-cache-in-ipython-notebook
-
-The SVM classifier trained 
-
-See `Train and Optimise Classifier.ipynb` in the `code_samples` directory for 
-implementation details.
+See the notebooks in the `code_samples` directory for implementation details.
 
 ### Refinement
 
-The classifier refinement step is bundled as part of the classifier training 
-using grid search cross validation against the accuracy metric. Results 
-including the parameters for the best performing configuration for a given 
-number of principal components as well as the total results by parameter set 
-are available in `train.txt` in the `results` directory.
+The classifier refinement step is bundled as part of the classifier training. 
+I used a test/train split to produce a validation set to use as part of the 
+training step, then run the trained classifier on the test set. I used a range 
+of parameters following from the my reading of the literature, this meant 
+varying the number of principal components, the number of nearest neighbours, 
+and the SVM parameters C, gamma, kernel and degree - for the polynomial kernel 
+only.
 
--> Insert intermediate results here
--> Discuss them here
+A subset of results for the best performing parameters are shown below.
+
+Varying nearest neighbours, k, for constant number of principal components
 
 | k   | PC  | Parameter Set | Test Set Accuracy |
 | --- | --- | ------------- | ----------------- |
 | 50  | 100 | 1             | 0.9843            |
 | 100 | 100 | 1             | 0.9858            |
 | 200 | 100 | 1             | 0.9858            |
+
+Varying number of principal components for constant nearest neighbours k
 
 | k   | PC  | Parameter Set | Test Set Accuracy |
 | --- | --- | ------------- | ----------------- |
@@ -367,10 +369,21 @@ or the eight combinations of,
 * `gamma` = ( 10^-3, 10^-4 }
 * `kernel` = polynomial
 
+Although varying the number of parameters did not appreciably increase the 
+testing accuracy, we can spot a few trends,
 
-Optimisation was acheived using grid search cross-validation with a 5-fold 
-cross-validation splitting strategy measured against the accuracy metric. 
-The initial parameter set used for this refinement process were derived from ...
+* Increasing k improved the classifier accuracy, at least up to a point - see 
+rows where k equals 100 and 200 in the first table. However, this comes at a 
+cost of longer processing times
+* Increasing PC improved classifier accuracy, more siginficantly than k. This 
+is perhaps to be expected as the resulting dataset has more features to use. 
+However, again this comes at a cost of longer processing times
+* The parameter selection for SVM was not very significant for the final 
+classifier - the best performing classifiers used eight parameter 
+configurations. This is probably a consequence of using a hybrid approach: The 
+input space to the SVM is fairly small
+* A low degree polynomial kernel outperformed all other kernel choices - this 
+is common in the NLP space, as these least overfit the data
 
 See `Train and Optimise Classifier.ipynb` in the `code_samples` directory for 
 implementation details.
@@ -378,27 +391,26 @@ implementation details.
 ## IV. Results
 
 ### Model Evaluation and Validation
-In this section, the final model and any supporting qualities should be 
-evaluated in detail. It should be clear how the final model was derived and why 
-this model was chosen. In addition, some type of analysis should be used to 
-validate the robustness of this model and its solution, such as manipulating 
-the input data or environment to see how the model’s solution is affected (this 
-is called sensitivity analysis). Questions to ask yourself when writing this 
-section:
-- _Is the final model reasonable and aligning with solution expectations? Are 
-the final parameters of the model appropriate?_
-- _Has the final model been tested with various inputs to evaluate whether the 
-model generalizes well to unseen data?_
-- _Is the model robust enough for the problem? Do small perturbations (changes) 
-in training data or the input space greatly affect the results?_
-- _Can results found from the model be trusted?_
+
+The best performing classifier had the following parameters,
+
+* k = 100
+* PC = 100
+* SVM parameters are any from parameter set 1, above
+
+These parameters were selected by comparing each trained classifier against the 
+test set. These parameters make sense in light of theoretical considerations,
+
+* The number of nearest neighbours, k, should be approximately ``sqrt(N)/2``
+* The number of principal components account for  91% of the variance, see the 
+"Data Preprocessing" section above
 
 See `Train and Optimise Classifier.ipynb` and `Evaluate Classifier.ipynb` in 
 the `code_samples` directory for implementation details.
 
 ### Justification
 
-The final classifier used an arbitrary selection of parameters from paramter 
+The final classifier used an arbitrary selection of parameters from parameter 
 set one.
 
 The benchmark reported above produced a SVM classifier with an error of 1.4%. 
@@ -460,7 +472,7 @@ The workflow for this project was as follows,
 2. Finding and downloading relevant dataset
 3. Preprocessed dataset using PCA
 4. Initial classification of dataset using KNN
-5. Trained SVM using range of paramters - only used samples not correctly labelled by KNN
+5. Trained SVM using range of parameters - only used samples not correctly labelled by KNN
 6. Produced more results for most successful KNN-SVM classifier
 
 The most difficult stages in the project were also happily the most 
@@ -478,11 +490,10 @@ This is extremely promising moving into a more general setting.
 ### Improvement
 
 The major bottleneck for this project was the implementation of the SVM 
-classifier used by Scikit-Learn. This SVM does not scale well for larger 
-datasets, with a reported order of growth between the square of the number of 
-samples and the cube the number of samples[11]. A number of solutions to 
-explore include trying to better utilise caching of calculated distances in 
-memory, trying alternatives to Scikit-Learn like Vowpal Wabbit, or make better 
+classifier used by SciKit-Learn. This SVM does not scale well for larger 
+datasets as noted above in the "Implementation" section. A number of solutions 
+to explore include trying to better utilise caching of calculated distances in 
+memory, trying alternatives to SciKit-Learn like Vowpal Wabbit, or make better 
 use of dedicated hardware, such as running the SVM on the GPU rather than a 
 general purpose CPU. If a significant performance improvement can be made for 
 the SVM classifier then I believe a future classifier could outperform the 
