@@ -1,7 +1,7 @@
 # Machine Learning Engineer Nanodegree
 ## Capstone Project
 Tom Martin
-29th January 2017
+30th January 2017
 
 ## I. Definition
 
@@ -31,7 +31,7 @@ reasons, this paper will form a benchmark for the following analysis.
 
 The capstone will attempt to train and tune a SVM classifier that is able to 
 correctly determine the number intended from the supplied image of a 
-handwritten sample. The model produced will be trained, tested and validated 
+handwritten sample. The model produced will be trained, validated and tested 
 against the supplied dataset.  The success of the classifier will be measured 
 using the SciKit-Learn metric's module `metrics.accuracy_score`,
 `metrics.confusion_matrix`. From these metrics we can derive both the error 
@@ -48,41 +48,38 @@ have training data. There are also a number of academic studies that have had
 success with SVM classifiers[2]. Before building the model, I will use 
 principal component analysis (PCA) with dimension reduction. PCA is 
 used to reduce the feature space of the training data to reduce the overall 
-training and testing time, as well as making it easier to graphically 
-illustrate - can produce two-dimensional plot of classifying boundaries. 
-This is especially useful for a dataset both as large and feature-rich as the 
-MNIST dataset. It has been shown that in general PCA does not negatively 
-impact the accuracy of a classifier, and has even been shown to boost the 
-accuracy of the SVM classfier[9]. I will evaluate the classfier using two 
-different kernels: Gaussian, or RBF kernel, and polynomial. The choice is for 
-two reasons: Firstly, Both these kernels are useful in cases such as thus where 
-the data set is not linearly separable. Secondly, I want to make a direct 
-comparison with the benchmark study, which used the Gaussian kernel. 
+training and testing time. This is especially useful for a dataset both as 
+large and feature-rich as the MNIST dataset. It has been shown that in general 
+PCA does not negatively impact the accuracy of a classifier, and has even been 
+shown to boost the accuracy of the SVM classfier[7]. I will evaluate the 
+classfier using two different kernels: Gaussian, or RBF kernel, and polynomial. 
+The choice is for two reasons: Firstly, Both these kernels are useful in cases 
+such as this where the data set is not linearly separable. Secondly, I want to 
+make a direct comparison with the benchmark study, which used the Gaussian 
+kernel. 
 
 The trained classifier can be evaluated using a confusion matrix, and derived 
-metrics to determine its degree of success. To evaluate the 
-trained model thoroughly, k-fold cross validation will be used to get a 
-representative performance score of the model. Furthermore, we can consider a 
+metrics to determine its degree of success. Furthermore, we can consider a 
 number of previous models[8] of the dataset using a SVM classifier, which have 
 accuracies around 99%.
 
 ### Metrics
 
 The evaluation metrics for this model will be the confusion matrix, accuracy, 
-error rater, andper digit error rate. The latter two are to enable a direct 
+error rater, and per digit error rate. The latter two are to enable a direct 
 comparison with the benchmark, which calculates these values in the paper.
 
-I will be focussing on using the confusion matrix and accuracy to evaluate the 
+I will be focussing on the confusion matrix and accuracy to evaluate the 
 classfier for the two main reasons. Firstly, the labels in the dataset are 
 fairly uniformly distributed, as shown in figure 2 below. This means we can take 
 the simpler option of just using accuracy as we do not need to consider 
 imbalances between classes - accuracy will strongly correspond to other 
-measures such as precision. Secondly, this is a multi-class classification 
-problem where we are more interested in correct classifactions than 
-misclassifications, so accuracy is sufficient to meaningfully evaluate the 
+measures such as precision in this case. Secondly, this is a multi-class 
+classification problem where we are more interested in correct classifactions 
+than misclassifications, so accuracy is sufficient to meaningfully evaluate the 
 classfier on its own. The confusion matrix will still contain useful 
 information especially if there is strong presence of misclassifications on a 
-per digit bases, which would not be clear from accuracy alone.
+per digit bases, which would not be as clear from accuracy alone.
 
 A supervised classfier such as SVM has known labelled data, so we can determine 
 the number of true positives, true negatives, false positives, and false 
@@ -100,7 +97,7 @@ mapping from the true labels to the predicted labels. Elements along the
 diagonal represent a correct classification, whereas the off-diagonal represent
 a misclassification. A confusion matrix can be a useful check to 
 see what digits in particular are most likely confused for one another. From 
-here we can derive[6] the accuracy.
+here we can derive the accuracy.
 
 Accuracy is given by the total number of correct classifcations, both true 
 positives and true negatives divided by the total dataset population. This 
@@ -148,7 +145,7 @@ The MNIST dataset contatins 70000 samples of handwritten digits, labelled from
 testing respectively. The samples themselve have been centred and normalised 
 to a grid size of 28-by-28 pixels, with each training entry composed of 784 
 features, corresponding the greyscale level for each pixel. The MNIST 
-dataset in this case will be the MNIST original[7] dataset obtained via the 
+dataset in this case will be the MNIST original[9] dataset obtained via the 
 mldata repository using SciKit-Learn's `datasets.fetch_mldata` method. A sample 
 of the dataset is given below.
 
@@ -156,9 +153,9 @@ of the dataset is given below.
 
 The class labels in the testing set are roughly uniformly distributed, with the 
 number of occurences of each label ranging from around 6300 and 7900. The 
-distribution is shown graphically in figure 1 above. This distribution of 
+distribution is shown graphically in figure 2 below. This distribution of 
 labels means that no special sampling needs to take place to train and test 
-correctly, and as discussed above means we can opt for the simpler choice of 
+correctly, and as discussed above, means we can opt for the simpler choice of 
 deriving only the accuracy as the evaluation metric.
 
 On a historical note, this dataset is the result of subsampling the original 
@@ -197,32 +194,31 @@ parameters relevant for this investigation,
 * degree - the degree of the polynomial kernel
 * gamma - kernel coefficient, defines radius of influence for a given datapoint
 
-The specific parameter values will be decided using grid search cross validation 
-starting from a set of values following the relevant literature. This technique 
-is a simple and effective means of optimising the classifier, as a way of 
-justifying our initial assumptions. Other parameters not specified here will be 
-used at their default values.
+The specific parameter values will be decided by cycling through a range of 
+valuesstarting from a set of values following the relevant literature. This 
+technique is a simple and effective means of optimising the classifier, as a 
+way of justifying our initial assumptions. Other parameters not specified here 
+will be used at their default values.
 
 Due to the size of the dataset used in this project it is necessary to use a 
 hybrid approach[10]. This means initially running the dataset through a k 
-nearest neighbours classifier (KNN) and only run the incorrectly labelled 
-digits through the SVM classifier. Together this known as KNN-SVM, and has the 
-dual advantage of achieving a high level of accuracy on a feature rich dataset 
-using SVM, whilst offloading a large proportion of the classification problem 
-to a much cheaper KNN classifier.
-
-The classifier will be trained using a validation set by performing a test 
-train split. I will vary the following parameters,
+nearest neighbours classifier (KNN) and only run digits through the SVM 
+classifier where the k neighbours do not have the same label. Together this 
+known as KNN-SVM, and has the dual advantage of achieving a high level of 
+accuracy on a feature rich dataset using SVM, whilst offloading a large 
+proportion of the classification problem to a much cheaper KNN classifier. In 
+addition to the SVM parameters I will vary the following,
 
 * PCA: `n_components`
 * KNN: `n_neighbors`
-* SVM: `C`, `degree`, `gamma`, `kernel`
 
-Each trained classifier will be used to evaluate the test set. The performance 
-metrics to be used are discussed above.
+to determine their effect on the classifier accuracy. The classifier will be 
+trained using a validation set by performing a test/train split. Each trained 
+classifier will be used to evaluate the test set. The performance metrics to be 
+used are discussed above.
 
-Preprocessing will be done using PCA with dimension 
-reduction. This is discussed at greater length below.
+Preprocessing will be done using PCA with dimension reduction. This is 
+discussed at greater length below.
 
 ### Benchmark
 
@@ -242,7 +238,7 @@ results and the availability of the identical testing set, a direct comparison
 with this paper's results is possible.
 
 However, unlike the benchmark study, I will perform preprocessing on the dataset 
-using PCA. Following the study by Lei and Govindaraju[8] I 
+using PCA. Following the study by Lei and Govindaraju[7] I 
 will choose to model with several different numbers of principal components 
 between 25 and 100, as this is where they found a boosted classifier 
 performance. I will also use a hybrid approach, using a combination of KNN and 
@@ -258,12 +254,12 @@ creates a local cache for subsequent reads.
 Data preprocessing was achieved using PCA with dimensional reduction. This was 
 to enable a speed up in the training and execution time of the classifier, 
 which has been shown to not degrade performance in general - and has even let 
-to some improvement[8]. This is also a very necessary step when processing such 
+to some improvement. This is also a very necessary step when processing such 
 a large and feature reach dataset such as MNIST especially when training on 
 general purpose hardware. The number of components to use in this step comes 
 follows from two considerations. Firstly, a previous study using PCA on the 
 MNIST dataset showed boosted SVM performance for a number of principal 
-components below 100[8]. Secondly, by looking at the explained variance ratio, 
+components below 100[7]. Secondly, by looking at the explained variance ratio, 
 we see that over 91% of the variance is accounted for by the top 100 
 components.
 
@@ -274,7 +270,8 @@ sum(explained_variance[101]) # => 91.6%
 ```
 
 For my implementation, I used the Python `pickle` 
-module to persist the target and and preprocessed data samples across files.
+module to serialise the target and and preprocessed data samples to easily 
+share across files.
 
 PCA was performed before the test train split to ensure consistent 
 analysis, the dimensionality of the training data should be the same as the 
@@ -307,11 +304,22 @@ this point that the the distance matrix is converted to a kernel matrix for SVM
 classifier. 
 
 All the algorithms and modules used in the project implementation come from 
-SciKit-Lean 0.18.1 libary. Those being `decomposition.PCA`, 
-`neighbors.KNeighborsClassifier`, and `svm.SVC` for classifaction, 
-`model_selection.train_test_split` to perform the test/train split, and 
-`metrics.accuracy_score`, `metrics.confusion_matrix` to derive evaluation 
-metrics.
+SciKit-Lean 0.18.1 libary. Those being,
+
+for classifaction,
+
+* `decomposition.PCA`
+* `neighbors.KNeighborsClassifier`
+* `svm.SVC`
+
+for test/train split
+
+* `model_selection.train_test_split`
+
+and to derive evaluation metrics
+
+* `metrics.accuracy_score`
+*  `metrics.confusion_matrix`
 
 The training and evaluation step was done over a set of variables for both the 
 KNN and SVM classifiers to perform a basic hyperparameter optimisation.
@@ -516,13 +524,13 @@ A1D8E2811526BD0E596?doi=10.1.1.106.3963&rep=rep1&type=pdf "Deformation Models fo
 [6] http://softclassval.r-forge.r-project.org/2013/2013-01-03-ChemomIntellLabSys
 tTheorypaper.html "Validation of Soft Classification Models using Partial Class Memberships: An Extended Concept of Sensitivity & Co. applied to Grading of Astrocytoma Tissues"
 
-[7] http://mldata.org/repository/data/viewslug/mnist-original/ "MNIST (original)"
-
-[8] https://www.researchgate.net/profile/Giovanni_Felici/publication/226795010
+[7] https://www.researchgate.net/profile/Giovanni_Felici/publication/226795010
 _Feature_Selection_for_Data_Mining/links/53e413d70cf25d674e94b475.pdf#p
 age=78  "Speeding Up Multi-class SVM Evaluation by PCA and Feature Selection"
 
-[9] http://yann.lecun.com/exdb/mnist/ "The MNIST Database of Handwritten Digits"
+[8] http://yann.lecun.com/exdb/mnist/ "The MNIST Database of Handwritten Digits"
+
+[9] http://mldata.org/repository/data/viewslug/mnist-original/ "MNIST (original)"
 
 [10] https://www.vision.caltech.edu/Image_Datasets/Caltech101/nhz_cvpr06.pdf SVM-KNN: Discriminative Nearest Neighbor Classification for Visual Category Recognition
 
