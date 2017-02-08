@@ -23,7 +23,7 @@ of machine learning classifiers, such as linear classifiers[1], svm[2],
 k-nearest neighbours[3], and a range of neural network implementations[4].
 There have therefore been a number of different approaches shown to be suitable 
 to classify the dataset correctly. A paper by Hartwick[5] is particularly 
-relevant for this projet as he has provided a clear analysis of the 
+relevant for this project as he has provided a clear analysis of the 
 dataset without any further preprocessing with an SVM classifier. For these 
 reasons, this paper will form a benchmark for the following analysis. 
 
@@ -213,9 +213,15 @@ addition to the SVM parameters I will vary the following,
 * KNN: `n_neighbors`
 
 to determine their effect on the classifier accuracy. The classifier will be 
-trained using a validation set by performing a test/train split. Each trained 
-classifier will be used to evaluate the test set. The performance metrics to be 
-used are discussed above.
+trained with a validation set by performing a test/train split using 
+SciKit-Learn's `model_selection.StratifiedShuffleSplit`. This is in order to 
+perform a form of hyperparameter optimisation by running the classifier with a 
+given set of paramters against multiple training and testing sets, to compensate 
+for any possible overfitting with any one training set. This module in 
+particular, will perform a test/train whilst preserving the frequency of each 
+category in each subsample, so the frequency of occurence of each sample is 
+similar. Each trained classifier will be used to evaluate the test set. The 
+performance metrics to be used are discussed above.
 
 Preprocessing will be done using PCA with dimension reduction. This is 
 discussed at greater length below.
@@ -273,7 +279,7 @@ For my implementation, I used the Python `pickle`
 module to serialise the target and and preprocessed data samples to easily 
 share across files.
 
-PCA was performed before the test train split to ensure consistent 
+PCA was performed before the test/train split to ensure consistent 
 analysis, the dimensionality of the training data should be the same as the 
 test data.
 
@@ -292,7 +298,7 @@ number of samples and the cube the number of samples[11].
 
 ![Project Implementation](./images/project_implementation.png "Project Implementation")
 
-Going from top to bottom through the above figure. Given the initial dataset, 
+Going from top to bottom through the following figure. Given the initial dataset, 
 I performed PCA with dimensional reduction for three different numbers of 
 principal components and serialised the result with the `pickle` module. A 
 test/train split was then performed before moving on to training, in order to 
@@ -314,7 +320,7 @@ for classifaction,
 
 for test/train split
 
-* `model_selection.train_test_split`
+* `model_selection.StratifiedShuffleSplit`
 
 and to derive evaluation metrics
 
@@ -336,23 +342,24 @@ varying the number of principal components, the number of nearest neighbours,
 and the SVM parameters C, gamma, kernel and degree - for the polynomial kernel 
 only.
 
-A subset of results for the best performing parameters are shown below.
+A subset of results for the best performing parameters are shown below, note the 
+standard deviation for each parameter set is quoted in parentheses.
 
 Varying nearest neighbours, k, for constant number of principal components
 
-| k   | PC  | Parameter Set | Test Set Accuracy |
-| --- | --- | ------------- | ----------------- |
-| 50  | 100 | 1             | 0.9843            |
-| 100 | 100 | 1             | 0.9858            |
-| 200 | 100 | 1             | 0.9858            |
+| k   | PC  | Parameter Set | Average Test Set Accuracy (Standard Deviation) |
+| --- | --- | ------------- | ---------------------------------------------- |
+| 3   | 50  | 1             | 0.9804 (0.0008)                                |
+| 5   | 50  | 1, 2          | 0.9828 (0.0005)                                |
+| 7   | 50  | 1             | 0.9834 (0.0006)                                |
 
 Varying number of principal components for constant nearest neighbours k
 
-| k   | PC  | Parameter Set | Test Set Accuracy |
-| --- | --- | ------------- | ----------------- |
-| 100 | 25  | 2             | 0.9822            |
-| 100 | 50  | 1             | 0.9849            |
-| 100 | 100 | 1             | 0.9858            |
+| k   | PC  | Parameter Set | Average Test Set Accuracy (Standard Deviation) |
+| --- | --- | ------------- | ---------------------------------------------- |
+| 7   | 25  | 1             | 0.9805 (0.0009)                                |
+| 7   | 50  | 1             | 0.9834 (0.0006)                                |
+| 7   | 100 | 1             | 0.9822 (0.0004)                                |
 
 Parameter sets
 
@@ -380,8 +387,7 @@ or the eight combinations of,
 Although varying the number of parameters did not appreciably increase the 
 testing accuracy, we can spot a few trends,
 
-* Increasing k improved the classifier accuracy, at least up to a point - see 
-rows where k equals 100 and 200 in the first table. However, this comes at a 
+* Increasing k improved the classifier accuracy. However, this comes at a 
 cost of longer processing times
 * Increasing PC improved classifier accuracy, more siginficantly than k. This 
 is perhaps to be expected as the resulting dataset has more features to use. 
@@ -400,18 +406,25 @@ implementation details.
 
 ### Model Evaluation and Validation
 
+To obtain the best performing classifier I performed a simple form of 
+cross-validation, using the module `StratifiedShuffleSplit` to produce three 
+different test and train sets to run each of the parameter sets against. This is 
+to ensure a degree of robustness of the model: A good performing model is not 
+simply overfit to one test/training set. For each parameter selection I found 
+the average accuracy and reported the standard deviation. In all cases the 
+standard deviation was very small, indicative of a high degree of consistency 
+across trained models.
+
 The best performing classifier had the following parameters,
 
-* k = 100
-* PC = 100
+* k = 7
+* PC = 50
 * SVM parameters are any from parameter set 1, above
 
 These parameters were selected by comparing each trained classifier against the 
-test set. These parameters make sense in light of theoretical considerations,
-
-* The number of nearest neighbours, k, should be approximately ``sqrt(N)/2``
-* The number of principal components account for  91% of the variance, see the 
-"Data Preprocessing" section above
+test set. These parameters make sense in light of theoretical considerations, 
+namely: The number of principal components account for around 90% of the 
+variance, see the "Data Preprocessing" section above.
 
 See `Train and Optimise Classifier.ipynb` and `Evaluate Classifier.ipynb` in 
 the `code_samples` directory for implementation details.
@@ -423,7 +436,7 @@ set one.
 
 The benchmark reported above produced a SVM classifier with an error of 1.4%. 
 This compares favourably with the classfier trained in this project with has an 
-error of 1.42% (corresponding to an accuracy of 98.58%). Discrepancies 
+error of 1.6% (corresponding to an accuracy of 98.4%). Discrepancies 
 between the benchmark results may be due to,
 
 * Preprocessing with PCA on the intial dataset, the benchmark study did not use 
@@ -441,21 +454,21 @@ digit was fairly similar dispite the preprocessing. In both cases the digits 1,
 0, 6 has the lowers error rates, and digit 9 had siginficantly greater error 
 rates. Interesting differences between the classifiers are highlighted by 
 looking at the error rate for digit 4, which had the 4th lowest error rate in 
-the benchmark, but had the 3rd worst error rate in my trained classifier. 
+the benchmark, but had the 2ns worst error rate in my trained classifier. 
 It is not clear how this relates to PCA and KNN.
 
 | Digit | Benchmark Error | Error per Digit | 
 | ----- | --------------- | --------------- | 
-| 0	    | 0.0061	        | 0.0022	        | 
-| 1	    | 0.0052	        | 0.0053	        | 
-| 2	    | 0.0164          | 0.0104	        | 
-| 3	    | 0.0148	        | 0.0176	        | 
-| 4	    | 0.0132	        | 0.0214	        | 
-| 5	    | 0.0168	        | 0.0232	        | 
-| 6	    | 0.0104	        | 0.0101	        | 
-| 7	    | 0.0184	        | 0.0139	        | 
-| 8	    | 0.0184	        | 0.0136	        | 
-| 9	    | 0.0277	        | 0.0257	        | 
+| 0	    | 0.0061	        | 0.0124	        | 
+| 1	    | 0.0052	        | 0.0027	        | 
+| 2	    | 0.0164          | 0.0184	        | 
+| 3	    | 0.0148	        | 0.0170          | 
+| 4	    | 0.0132	        | 0.0209	        | 
+| 5	    | 0.0168	        | 0.0181	        | 
+| 6	    | 0.0104	        | 0.0062	        | 
+| 7	    | 0.0184	        | 0.0196	        | 
+| 8	    | 0.0184	        | 0.0199	        | 
+| 9	    | 0.0277	        | 0.0267	        | 
 
 
 ## V. Conclusion
@@ -492,7 +505,7 @@ was both very effective and also a first for me.
 
 The final model is robust, effective and efficient. In this project I have been 
 able to derive a classifier with over 98% accuracy, highly competitive with 
-the benchmark study, in a total running time of under 160s (on my laptop). 
+the benchmark study, in a total running time of under 60s (on my laptop). 
 This is extremely promising moving into a more general setting.
 
 ### Improvement
